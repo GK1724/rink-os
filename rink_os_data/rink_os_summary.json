@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "team": "TOR",
+    "season": "20262027",
+    "generated_at_utc": "2026-11-27T14:56:39.660548+00:00",
+    "source": "NHL standings/now + stats team summary"
+  },
+  "gp": 26,
+  "wins": 9,
+  "losses": 14,
+  "ot_losses": 3,
+  "record": "9-14-3",
+  "points": 21,
+  "pts_pct": 0.4038,
+  "pts_pct_display": ".404",
+  "points_pace_82": 66.2,
+  "games_remaining": 56,
+  "division": "Atlantic",
+  "division_seq": 8,
+  "division_ordinal": "8th",
+  "goals_for": 82,
+  "goals_against": 92,
+  "ga_per_game": 3.54,
+  "ga_rank_nhl": 27,
+  "ga_rank_ordinal": "27th",
+  "l10_record": "1-8-1",
+  "streak": "W1",
+  "pp_pct": 25.35,
+  "pk_pct": 82.28
+}
