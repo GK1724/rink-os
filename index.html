@@ -2325,7 +2325,7 @@
                 fetch('rink_os_data/rink_os_summary.json', { cache: 'no-store' })
                   .then(function (r) { if (!r.ok) throw new Error('feed ' + r.status); return r.json(); })
          .then(function (s) {
-                 var gaLine = s.goals_against + ' GA (' + s.ga_rank_ordinal + ' NHL \u2022 ' + Number(s.ga_per_game).toFixed(2) + ' GA/G);
+                 var gaLine = s.goals_against + ' GA (' + s.ga_rank_ordinal + ' NHL \u2022 ' + Number(s.ga_per_game).toFixed(2) + ' GA/G)';
                  var pairs = [
                            ['82 / 92', s.goals_for + ' / ' + s.goals_against],
                            ['92 GA (27th NHL \u2022 3.54 GA/G)', gaLine],
