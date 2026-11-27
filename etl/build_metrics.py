@@ -176,7 +176,7 @@ def run_metrics(data_dir: Path = DATA_DIR) -> dict[str, Any]:
 
     out_path = data_dir / "rink_os_metrics.json"
     with out_path.open("w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2)
+        json.dump(summary, f, indent=2, default=lambda v: int(v) if isinstance(v, np.integer) else float(v) if isinstance(v, np.floating) else str(v))
 
     logger.info("Computed xG, WOWY chemistry, and GSAx -> %s", out_path)
     return summary
