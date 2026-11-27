@@ -1,0 +1,2306 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RINK-OS | Toronto Maple Leafs NHL Operations Command Center (2026–27)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            slate: {
+              850: '#131b2e',
+              900: '#0f1626',
+              950: '#0b0f17',
+            },
+            leafs: {
+              950: '#00153d',
+              900: '#00205B',
+              800: '#00388C',
+              500: '#2563EB',
+              400: '#60A5FA',
+            },
+            ice: {
+              400: '#38bdf8',
+              500: '#0ea5e9',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0b0f17;
+      color: #f1f5f9;
+      font-family: 'Inter', sans-serif;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+    .glass-card {
+      background: linear-gradient(155deg, rgba(15, 22, 38, 0.96), rgba(11, 15, 23, 0.98));
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(96, 165, 250, 0.45);
+    }
+    .pulse-dot {
+      animation: pulseRing 2s infinite;
+    }
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7); }
+      70% { box-shadow: 0 0 0 6px rgba(56, 189, 248, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+    }
+    .rink-heat-zone {
+      transition: all 0.28s ease;
+    }
+    input[type="range"] {
+      accent-color: #38bdf8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-ice-500 selection:text-slate-950">
+
+  <!-- GLOBAL COMMAND HEADER -->
+  <header class="sticky top-0 z-40 bg-slate-950/95 backdrop-blur-md border-b border-slate-800/90">
+    <div class="max-w-[1640px] mx-auto px-4 sm:px-6">
+      
+      <!-- Top Telemetry Row -->
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between py-2.5 gap-2.5 border-b border-slate-800/70">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <!-- Maple Leafs / RINK-OS Crest -->
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-leafs-900 via-leafs-800 to-ice-500 flex items-center justify-center border border-leafs-400/40 shadow-lg shadow-leafs-900/50">
+              <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 15h8M12 11v8" />
+              </svg>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-base sm:text-lg font-extrabold tracking-tight text-white">RINK<span class="text-ice-400">-OS</span></span>
+                <span class="px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider rounded bg-leafs-900 text-leafs-400 border border-leafs-500/40">TORONTO MAPLE LEAFS</span>
+                <span class="hidden sm:inline-block px-2 py-0.5 text-[10px] font-mono font-semibold rounded bg-slate-900 text-slate-300 border border-slate-700">2026–27 NHL OPS</span>
+              </div>
+              <p class="text-[11px] text-slate-400 font-mono">HC: Jim Hiller &bull; GM: John Chayka &bull; Next: Fri Nov 27 @ BOS</p>
+            </div>
+          </div>
+
+          <div class="flex lg:hidden items-center gap-2 bg-leafs-900/60 px-2.5 py-1.5 rounded-lg border border-leafs-500/40">
+            <span class="w-2 h-2 rounded-full bg-ice-400 pulse-dot"></span>
+            <span class="text-[11px] font-mono font-bold text-white tabular-nums">9-14-3 (21 PTS)</span>
+          </div>
+        </div>
+
+        <!-- Team Season Vital Strip -->
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3 text-xs font-mono tabular-nums">
+          <div class="flex items-center gap-2 bg-leafs-900/50 px-3 py-1.5 rounded-xl border border-leafs-500/40">
+            <span class="w-2 h-2 rounded-full bg-ice-400 pulse-dot"></span>
+            <span class="font-bold text-white">26 GP: 9-14-3</span>
+            <span class="text-slate-500">|</span>
+            <span class="text-amber-400 font-bold">21 PTS (.404)</span>
+            <span class="text-slate-500">|</span>
+            <span class="text-leafs-400 font-semibold">7th Atlantic</span>
+          </div>
+          <div class="hidden xl:flex items-center gap-2.5 bg-slate-900/90 px-3 py-1.5 rounded-xl border border-slate-800 text-[11px]">
+            <span class="text-slate-400">GF/GA: <strong class="text-white">82 / 90</strong></span>
+            <span class="text-slate-600">&bull;</span>
+            <span class="text-slate-400">5v5 xGF%: <strong class="text-amber-400">47.3%</strong></span>
+            <span class="text-slate-600">&bull;</span>
+            <span class="text-slate-400">PP: <strong class="text-emerald-400">25.35%</strong></span>
+            <span class="text-slate-600">&bull;</span>
+            <span class="text-slate-400">PK: <strong class="text-ice-400">82.28%</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categorized 9-Dashboard Navigation Bar -->
+      <div class="py-2 flex flex-col xl:flex-row xl:items-center justify-between gap-2 overflow-x-auto">
+        
+        <!-- Group 1: Coaching & Tactical -->
+        <div class="flex items-center gap-1 shrink-0">
+          <span class="text-[10px] font-mono uppercase tracking-wider text-ice-400/80 font-bold px-2 hidden 2xl:inline">Coaching:</span>
+          <button onclick="switchTab('tactical')" id="tab-tactical" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap bg-leafs-900 text-white border border-leafs-400/60 shadow-sm">
+            1. 5v5 Chemistry
+          </button>
+          <button onclick="switchTab('bench')" id="tab-bench" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent">
+            2. Live Bench Tablet
+          </button>
+          <button onclick="switchTab('forensics')" id="tab-forensics" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent">
+            3. D-Zone Forensics
+          </button>
+          <button onclick="switchTab('special')" id="tab-special" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent">
+            4. Special Teams &amp; Pre-Scout
+          </button>
+        </div>
+
+        <div class="hidden xl:block h-4 w-px bg-slate-800"></div>
+
+        <!-- Group 2: Front Office & Scouting -->
+        <div class="flex items-center gap-1 shrink-0">
+          <span class="text-[10px] font-mono uppercase tracking-wider text-amber-400/80 font-bold px-2 hidden 2xl:inline">Front Office:</span>
+          <button onclick="switchTab('cap')" id="tab-cap" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent">
+            5. Cap &amp; LTIR Sim
+          </button>
+          <button onclick="switchTab('trade')" id="tab-trade" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent">
+            6. Trade Fit Finder
+          </button>
+          <button onclick="switchTab('playoffs')" id="tab-playoffs" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent">
+            7. Playoff Odds Sim
+          </button>
+          <button onclick="switchTab('draft')" id="tab-draft" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent">
+            8. 2026 Draft &amp; Marlies
+          </button>
+        </div>
+
+        <div class="hidden xl:block h-4 w-px bg-slate-800"></div>
+
+        <!-- Group 3: Performance -->
+        <div class="flex items-center gap-1 shrink-0">
+          <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-400/80 font-bold px-2 hidden 2xl:inline">Performance:</span>
+          <button onclick="switchTab('goalie')" id="tab-goalie" class="nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent">
+            9. Goalies &amp; ACWR Lab
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE CONTAINER -->
+  <main class="flex-1 max-w-[1640px] w-full mx-auto px-4 sm:px-6 py-5">
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 1: 5v5 TACTICAL & LINE CHEMISTRY                               -->
+    <!-- ===================================================================== -->
+    <section id="view-tactical" class="space-y-5">
+      <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-mono uppercase tracking-wider text-ice-400 font-bold">Dashboard 01 // Coaching &amp; Tactical</span>
+            <span class="px-2 py-0.5 text-[11px] font-mono rounded bg-slate-900 text-slate-300 border border-slate-700 tabular-nums">Team 5v5: 48.7% CF% &bull; 54.5 xGF / 60.8 xGA &bull; 98.6 PDO</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">5v5 Tactical &amp; Line Chemistry Engine</h1>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Forward Line Unit</label>
+            <select id="forwardLineSelect" onchange="updateTacticalDashboard()" class="w-full bg-slate-900 border border-slate-700 hover:border-ice-400 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-white focus:outline-none">
+              <option value="L1">L1: Paul (9P) – Matthews (34P) – Cowan (18P)</option>
+              <option value="L1_ALT">L1 Alt: Marchenko (14P) – Matthews (34P) – Nylander (25P)</option>
+              <option value="L2">L2: McKenna (15P) – Tavares (10P) – Nylander (25P)</option>
+              <option value="L3">L3: Joshua (3P) – Räty (4P) – Roslovic (23P)</option>
+              <option value="L4">L4: Duhaime (4P) – Blueger (7P) – MacEwen (6P)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Defense Pairing</label>
+            <select id="defensePairSelect" onchange="updateTacticalDashboard()" class="w-full bg-slate-900 border border-slate-700 hover:border-ice-400 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-white focus:outline-none">
+              <option value="D1">Pair 1: McCabe (6P) – Raddysh (18P)</option>
+              <option value="D2">Pair 2: Ekman-Larsson (1P) – Tanev (2P)</option>
+              <option value="D3">Pair 3: Rielly (12P) – Stecher (7P)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-mono uppercase text-slate-400 mb-1">Sample Window</label>
+            <select id="sampleWindowSelect" onchange="updateTacticalDashboard()" class="w-full bg-slate-900 border border-slate-700 hover:border-ice-400 rounded-xl px-3 py-2 text-xs sm:text-sm font-medium text-white focus:outline-none">
+              <option value="season">Full 2026–27 Season (26 GP: 9-14-3)</option>
+              <option value="last10">Last 10 Games (3-6-1)</option>
+              <option value="home">Home Ice (Scotiabank Arena)</option>
+              <option value="road">Road Games</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Strip -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 tabular-nums" id="tactical-kpis"></div>
+
+      <!-- Main Grid -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Left 6 Cols: Interactive SVG Offensive Zone Shot Heatmap -->
+        <div class="xl:col-span-6 glass-card rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <div>
+                <h2 class="text-base font-bold text-white">Offensive Zone Shot &amp; xG Density Map</h2>
+                <p class="text-xs text-slate-400">Click any zone on the ice to inspect shot volume, S%, and xG.</p>
+              </div>
+              <div class="flex items-center gap-2 text-[11px] font-mono">
+                <span class="flex items-center gap-1 text-slate-300"><span class="w-2.5 h-2.5 rounded-sm bg-sky-500/40 border border-sky-400"></span>Perimeter</span>
+                <span class="flex items-center gap-1 text-slate-300"><span class="w-2.5 h-2.5 rounded-sm bg-amber-500/50 border border-amber-400"></span>Mid-Slot</span>
+                <span class="flex items-center gap-1 text-slate-300"><span class="w-2.5 h-2.5 rounded-sm bg-rose-500/60 border border-rose-400"></span>High Danger</span>
+              </div>
+            </div>
+
+            <div class="relative bg-slate-950 rounded-xl border border-slate-800 p-3">
+              <svg viewBox="0 0 500 355" class="w-full h-auto select-none">
+                <path d="M 20,15 L 480,15 L 480,270 Q 480,340 400,340 L 100,340 Q 20,340 20,270 Z" fill="#0d1424" stroke="#334155" stroke-width="2.5"/>
+                <line x1="20" y1="35" x2="480" y2="35" stroke="#0284c7" stroke-width="5" opacity="0.85"/>
+                <line x1="36" y1="295" x2="464" y2="295" stroke="#e11d48" stroke-width="2.5" opacity="0.75"/>
+                <circle cx="135" cy="205" r="50" fill="none" stroke="#e11d48" stroke-width="1.5" opacity="0.4"/>
+                <circle cx="365" cy="205" r="50" fill="none" stroke="#e11d48" stroke-width="1.5" opacity="0.4"/>
+                <path d="M 226,295 A 24,24 0 0,1 274,295 Z" fill="#0ea5e9" fill-opacity="0.25" stroke="#38bdf8" stroke-width="2"/>
+                <rect x="234" y="295" width="32" height="14" rx="3" fill="none" stroke="#94a3b8" stroke-width="2"/>
+
+                <!-- Zone 1: Low Slot / Crease -->
+                <g class="cursor-pointer group" onclick="selectRinkZone('Low Slot / Crease')">
+                  <polygon points="212,215 288,215 276,292 224,292" fill="#f43f5e" fill-opacity="0.55" stroke="#fb7185" stroke-width="2" class="rink-heat-zone group-hover:fill-opacity-80"/>
+                  <text id="label-slot" x="250" y="258" text-anchor="middle" fill="#ffffff" font-family="JetBrains Mono" font-size="12" font-weight="700">35%</text>
+                </g>
+                <!-- Zone 2: High Slot -->
+                <g class="cursor-pointer group" onclick="selectRinkZone('High Slot')">
+                  <polygon points="195,138 305,138 288,212 212,212" fill="#f59e0b" fill-opacity="0.45" stroke="#fbbf24" stroke-width="1.5" class="rink-heat-zone group-hover:fill-opacity-75"/>
+                  <text id="label-highslot" x="250" y="180" text-anchor="middle" fill="#ffffff" font-family="JetBrains Mono" font-size="12" font-weight="700">23%</text>
+                </g>
+                <!-- Zone 3: Left Circle -->
+                <g class="cursor-pointer group" onclick="selectRinkZone('Left Circle')">
+                  <polygon points="75,148 190,148 208,255 95,275" fill="#f59e0b" fill-opacity="0.35" stroke="#38bdf8" stroke-width="1.5" class="rink-heat-zone group-hover:fill-opacity-65"/>
+                  <text id="label-left" x="142" y="212" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="12" font-weight="700">19%</text>
+                </g>
+                <!-- Zone 4: Right Circle -->
+                <g class="cursor-pointer group" onclick="selectRinkZone('Right Circle')">
+                  <polygon points="310,148 425,148 405,275 292,255" fill="#0ea5e9" fill-opacity="0.32" stroke="#38bdf8" stroke-width="1.5" class="rink-heat-zone group-hover:fill-opacity-65"/>
+                  <text id="label-right" x="358" y="212" text-anchor="middle" fill="#e2e8f0" font-family="JetBrains Mono" font-size="12" font-weight="700">14%</text>
+                </g>
+                <!-- Zone 5: Point -->
+                <g class="cursor-pointer group" onclick="selectRinkZone('Point')">
+                  <rect x="75" y="50" width="350" height="78" rx="10" fill="#0ea5e9" fill-opacity="0.22" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="4 3" class="rink-heat-zone group-hover:fill-opacity-50"/>
+                  <text id="label-point" x="250" y="93" text-anchor="middle" fill="#bae6fd" font-family="JetBrains Mono" font-size="12" font-weight="700">9% (Point)</text>
+                </g>
+              </svg>
+
+              <div class="mt-2.5 flex flex-wrap items-center justify-between gap-2 bg-slate-900/95 border border-slate-800 rounded-xl px-3.5 py-2.5">
+                <div>
+                  <span class="text-[11px] font-mono uppercase text-ice-400">Zone Readout:</span>
+                  <span id="activeZoneName" class="text-xs sm:text-sm font-bold text-white ml-1">Low Slot / Crease</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs font-mono tabular-nums">
+                  <span id="activeZoneStats" class="text-emerald-400 font-semibold">46 Att &bull; 21.7% S% &bull; 11.4 xG</span>
+                  <button onclick="openVideoModal('Slot Cycle &amp; Rebound Conversions', 'Nov 23, 2026 • TOR 4 @ NYI 2')" class="px-2.5 py-1 rounded-lg bg-ice-500 hover:bg-ice-400 text-slate-950 font-sans font-bold text-xs transition">
+                    Watch Clips
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Micro-Tracking Transition Bars -->
+          <div class="mt-4 pt-3.5 border-t border-slate-800/80">
+            <div class="flex items-center justify-between mb-2.5">
+              <h3 class="text-xs font-mono uppercase tracking-wider text-slate-300 font-semibold">60Hz Optical Transition Micro-Tracking</h3>
+              <span class="text-[11px] font-mono text-slate-400">NHL Benchmark: 52.0%</span>
+            </div>
+            <div class="space-y-2.5" id="transitionBarsContainer"></div>
+          </div>
+        </div>
+
+        <!-- Right 6 Cols: WOWY Matrix & Shift Video Cutups -->
+        <div class="xl:col-span-6 flex flex-col gap-5">
+          <div class="glass-card rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h2 class="text-base font-bold text-white">WOWY (With Or Without You) Isolation Matrix</h2>
+                <p class="text-xs text-slate-400">Separating line chemistry from individual star gravity (Matthews +12).</p>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-[11px] font-mono text-ice-400">5v5 Splits</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse tabular-nums">
+                <thead>
+                  <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400">
+                    <th class="py-2 px-3">On-Ice Split</th>
+                    <th class="py-2 px-2 text-right">TOI</th>
+                    <th class="py-2 px-2 text-right">CF%</th>
+                    <th class="py-2 px-2 text-right">xGF%</th>
+                    <th class="py-2 px-2 text-right">HDCF%</th>
+                    <th class="py-2 px-2 text-right">xGF/60</th>
+                  </tr>
+                </thead>
+                <tbody id="wowyTableBody" class="divide-y divide-slate-800/60 text-xs sm:text-sm font-mono"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-5 flex-1">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h2 class="text-base font-bold text-white">8-Second Optical Shift Video Triggers</h2>
+                <p class="text-xs text-slate-400">Click any game event to inspect puck/player tracking replay.</p>
+              </div>
+              <span class="text-xs font-mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-lg">26 GP Synced</span>
+            </div>
+            <div class="space-y-2.5" id="videoTriggersList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 2: LIVE BENCH TABLET (REAL-TIME)                               -->
+    <!-- ===================================================================== -->
+    <section id="view-bench" class="hidden space-y-5">
+      <div class="glass-card rounded-2xl p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-l-4 border-l-ice-400">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/40 font-mono text-[11px] font-bold animate-pulse">LIVE BENCH SIMULATOR</span>
+            <span class="text-xs font-mono text-slate-400">Dashboard 02 // Jim Hiller Bench iPad View</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">In-Game Matchup Matrix &amp; Empty-Net Pull Optimizer</h1>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <div>
+            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Game State Scenario</label>
+            <select id="benchStateSelect" onchange="updateBenchTablet()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold text-white">
+              <option value="tied">P3 11:42 • TOR 2 @ BOS 2 (Tied)</option>
+              <option value="trailing1">P3 03:15 • TOR 2 @ BOS 3 (Trailing by 1)</option>
+              <option value="trailing2">P3 05:10 • TOR 1 @ BOS 3 (Trailing by 2)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Change Advantage</label>
+            <select id="benchChangeSelect" onchange="updateBenchTablet()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm font-semibold text-white">
+              <option value="road">Road Game (@ TD Garden — BOS Last Change)</option>
+              <option value="home">Home Ice (Scotiabank — TOR Last Change)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shift-Length & Fatigue Alert Bar -->
+      <div class="glass-card rounded-2xl p-4">
+        <div class="flex items-center justify-between mb-2.5">
+          <h2 class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold">Live Shift-Length &amp; Trapped D-Zone Fatigue Monitor</h2>
+          <span id="benchFaceoffRec" class="text-xs font-mono text-emerald-400 font-semibold">Next DZ Draw Rec: #53 Blueger / #10 Sissons (59.9% FOW%)</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 tabular-nums" id="benchShiftAlerts"></div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Left 7 Cols: Live Line-Matching Grid -->
+        <div class="xl:col-span-7 glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-base font-bold text-white">Head-to-Head Line Matchup Grid (vs. Boston Bruins)</h2>
+              <p class="text-xs text-slate-400">Real-time shift minutes, xG share %, and center faceoff win rates.</p>
+            </div>
+            <span id="lastChangeBadge" class="px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-xs">BOS Last Change</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse tabular-nums">
+              <thead>
+                <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400">
+                  <th class="py-2.5 px-3">TOR Unit &amp; Center FOW%</th>
+                  <th class="py-2.5 px-2">Primary BOS Opp</th>
+                  <th class="py-2.5 px-2 text-right">H2H TOI</th>
+                  <th class="py-2.5 px-2 text-right">Live xGF%</th>
+                  <th class="py-2.5 px-3 text-center">Bench Action</th>
+                </tr>
+              </thead>
+              <tbody id="benchMatchupBody" class="divide-y divide-slate-800/60 text-xs sm:text-sm font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: Win Probability & Empty-Net Pull Optimizer -->
+        <div class="xl:col-span-5 glass-card rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="text-base font-bold text-white">Win Probability &amp; Empty-Net Pull Optimizer</h2>
+              <span id="liveWinProbBadge" class="px-2.5 py-1 rounded-lg bg-ice-500/20 text-ice-400 border border-ice-500/40 font-mono text-xs font-bold tabular-nums">TOR Win Prob: 46.8%</span>
+            </div>
+            <p class="text-xs text-slate-400 mb-3">Calculates optimal goalie-pull timestamp using TOR 6v5 xGF/60 (4.85) vs 5v6 xGA/60 (3.62).</p>
+
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+              <svg viewBox="0 0 440 240" class="w-full h-auto">
+                <line x1="45" y1="200" x2="415" y2="200" stroke="#334155" stroke-width="1.5"/>
+                <line x1="45" y1="20" x2="45" y2="200" stroke="#334155" stroke-width="1.5"/>
+                <line x1="45" y1="110" x2="415" y2="110" stroke="#1e293b" stroke-dasharray="4 4"/>
+                <text x="38" y="25" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">100%</text>
+                <text x="38" y="113" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">50%</text>
+                <text x="38" y="203" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">0%</text>
+                <text x="45" y="218" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">P1 20:00</text>
+                <text x="168" y="218" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">P2 20:00</text>
+                <text x="291" y="218" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">P3 20:00</text>
+                <text x="410" y="218" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">0:00</text>
+
+                <!-- Dynamic Win Prob Path -->
+                <path id="winProbCurve" d="M 45,110 L 110,92 L 168,104 L 235,84 L 291,116 L 350,115" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+                <!-- Optimal Pull Threshold Marker -->
+                <line id="pullMarkerLine" x1="378" y1="20" x2="378" y2="200" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <text id="pullMarkerText" x="374" y="34" text-anchor="end" fill="#fbbf24" font-family="JetBrains Mono" font-size="9" font-weight="bold">Pull @ 2:35</text>
+              </svg>
+            </div>
+          </div>
+
+          <div id="pullRecommendationBox" class="mt-3 bg-slate-900/90 border border-slate-800 rounded-xl p-3 text-xs text-slate-300"></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 3: DEFENSIVE ZONE COVERAGE FORENSICS                           -->
+    <!-- ===================================================================== -->
+    <section id="view-forensics" class="hidden space-y-5">
+      <div class="glass-card rounded-2xl p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-l-4 border-l-rose-500">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-mono uppercase tracking-wider text-rose-400 font-bold">Dashboard 03 // System Breakdown Forensics</span>
+            <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/30 font-mono text-[11px] tabular-nums">90 GA (28th NHL • 3.46 GA/G) &bull; 60.8 5v5 xGA &bull; 188 HDA</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">Defensive Zone Coverage &amp; Breakout Forensics</h1>
+        </div>
+        <div class="bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-2.5 text-xs font-mono">
+          <span class="text-slate-400">System Audit:</span>
+          <span class="text-white font-semibold ml-1">Non-Switching Man-to-Man vs. Box+1 Slot Protection</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Left 6 Cols: Interactive SVG D-Zone Breakdown Map & Root-Cause Tagging -->
+        <div class="xl:col-span-6 glass-card rounded-2xl p-5">
+          <div class="mb-3">
+            <h2 class="text-base font-bold text-white">5v5 Goals Against (65 aGA) &amp; 188 HDA Root-Cause Map</h2>
+            <p class="text-xs text-slate-400">Click any breakdown category below to highlight failure vectors on the D-zone rink.</p>
+          </div>
+
+          <!-- 4 Root Cause Buttons -->
+          <div class="grid grid-cols-2 gap-2.5 mb-3 tabular-nums" id="dzoneCauseButtons"></div>
+
+          <!-- SVG Defensive Zone Rink -->
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+            <svg viewBox="0 0 500 310" class="w-full h-auto">
+              <path d="M 20,295 L 480,295 L 480,75 Q 480,15 400,15 L 100,15 Q 20,15 20,75 Z" fill="#0d1424" stroke="#334155" stroke-width="2.5"/>
+              <line x1="20" y1="275" x2="480" y2="275" stroke="#0284c7" stroke-width="5" opacity="0.85"/>
+              <line x1="36" y1="60" x2="464" y2="60" stroke="#e11d48" stroke-width="2.5" opacity="0.75"/>
+              <circle cx="135" cy="145" r="48" fill="none" stroke="#e11d48" stroke-width="1.5" opacity="0.35"/>
+              <circle cx="365" cy="145" r="48" fill="none" stroke="#e11d48" stroke-width="1.5" opacity="0.35"/>
+              <path d="M 226,60 A 24,24 0 0,0 274,60 Z" fill="#0ea5e9" fill-opacity="0.25" stroke="#38bdf8" stroke-width="2"/>
+
+              <!-- Dynamic Breakdown Vectors -->
+              <g id="dzoneVectorLayer"></g>
+            </svg>
+            <div id="dzoneCoachingNote" class="mt-2.5 bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 leading-relaxed"></div>
+          </div>
+        </div>
+
+        <!-- Right 6 Cols: Breakout Exit Matrix & Zone-Start Suppression Scatter -->
+        <div class="xl:col-span-6 flex flex-col gap-5">
+          <div class="glass-card rounded-2xl p-5">
+            <h2 class="text-base font-bold text-white mb-1">Defender Breakout Exit Efficiency Matrix (60Hz)</h2>
+            <p class="text-xs text-slate-400 mb-3">Linking failed D-zone exits directly to opponent xGA generated within 15 seconds.</p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse tabular-nums">
+                <thead>
+                  <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400">
+                    <th class="py-2 px-3">Defense Pair</th>
+                    <th class="py-2 px-2 text-right">Ctrl Exit%</th>
+                    <th class="py-2 px-2 text-right">Glass/Icing%</th>
+                    <th class="py-2 px-2 text-right">TO &rarr; xGA/60</th>
+                    <th class="py-2 px-2 text-right">5v5 xGA/60</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60 text-xs sm:text-sm font-mono">
+                  <tr class="bg-leafs-900/25">
+                    <td class="py-2.5 px-3 font-sans font-bold text-white">McCabe – Raddysh</td>
+                    <td class="py-2.5 px-2 text-right text-emerald-400 font-bold">54.2%</td>
+                    <td class="py-2.5 px-2 text-right text-slate-300">18.4%</td>
+                    <td class="py-2.5 px-2 text-right text-emerald-400">0.62</td>
+                    <td class="py-2.5 px-2 text-right text-emerald-400 font-bold">2.54</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-3 font-sans font-semibold text-slate-200">Ekman-Larsson – Tanev</td>
+                    <td class="py-2.5 px-2 text-right text-amber-400">48.6%</td>
+                    <td class="py-2.5 px-2 text-right text-slate-300">24.1%</td>
+                    <td class="py-2.5 px-2 text-right text-amber-400">0.84</td>
+                    <td class="py-2.5 px-2 text-right text-slate-200">2.88</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2.5 px-3 font-sans font-semibold text-slate-200">Rielly – Stecher</td>
+                    <td class="py-2.5 px-2 text-right text-rose-400">45.9%</td>
+                    <td class="py-2.5 px-2 text-right text-rose-400">27.8%</td>
+                    <td class="py-2.5 px-2 text-right text-rose-400 font-bold">1.14</td>
+                    <td class="py-2.5 px-2 text-right text-rose-400 font-bold">3.42</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Zone Start vs xGA/60 Scatter Plot -->
+          <div class="glass-card rounded-2xl p-5 flex-1">
+            <h2 class="text-base font-bold text-white mb-1">Deployment Context: oZS% vs. 5v5 xGA/60 Suppression</h2>
+            <p class="text-xs text-slate-400 mb-3">Lower on Y-axis = stronger shot suppression; further left = heavier D-zone starts.</p>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+              <svg viewBox="0 0 460 225" class="w-full h-auto">
+                <line x1="50" y1="190" x2="430" y2="190" stroke="#334155" stroke-width="1.5"/>
+                <line x1="50" y1="20" x2="50" y2="190" stroke="#334155" stroke-width="1.5"/>
+                <line x1="50" y1="105" x2="430" y2="105" stroke="#1e293b" stroke-dasharray="4 4"/>
+                <line x1="240" y1="20" x2="240" y2="190" stroke="#1e293b" stroke-dasharray="4 4"/>
+                <text x="240" y="216" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">Offensive Zone Start % (oZS%)</text>
+                <text x="15" y="105" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10" transform="rotate(-90 15,105)">5v5 xGA/60</text>
+                <text x="65" y="203" fill="#64748b" font-family="JetBrains Mono" font-size="9">38% (Heavy DZ)</text>
+                <text x="240" y="203" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">50%</text>
+                <text x="415" y="203" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">62% (Sheltered)</text>
+                <text x="44" y="185" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">2.2</text>
+                <text x="44" y="108" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">2.9</text>
+                <text x="44" y="30" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">3.6</text>
+
+                <!-- Defensemen Plotted -->
+                <circle cx="115" cy="145" r="6" fill="#10b981"/><text x="115" y="135" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">McCabe (41% oZS)</text>
+                <circle cx="135" cy="122" r="6" fill="#10b981"/><text x="135" y="112" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">Tanev (42% oZS)</text>
+                <circle cx="225" cy="138" r="6" fill="#38bdf8"/><text x="225" y="128" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">Raddysh (49%)</text>
+                <circle cx="195" cy="102" r="6" fill="#f59e0b"/><text x="195" y="92" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">OEL (47%)</text>
+                <circle cx="345" cy="52" r="6" fill="#ef4444"/><text x="345" y="42" text-anchor="middle" fill="#fca5a5" font-size="10" font-weight="bold">Rielly (58% oZS • 3.45 xGA)</text>
+                <circle cx="315" cy="68" r="6" fill="#ef4444"/><text x="315" y="83" text-anchor="middle" fill="#fca5a5" font-size="10" font-weight="bold">Stecher (56%)</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 4: SPECIAL TEAMS & PRE-SCOUT ENGINE                            -->
+    <!-- ===================================================================== -->
+    <section id="view-special" class="hidden space-y-5">
+      <div class="glass-card rounded-2xl p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold">Dashboard 04 // Special Teams &amp; Opponent Pre-Scout</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[11px] tabular-nums">TOR PP: 25.35% (18/71 • 6th NHL) &bull; TOR PK: 82.28% (65/79 • 7th NHL)</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">1-3-1 Power Play Network, PK Heatmap &amp; Upcoming Pre-Scout</h1>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-mono uppercase text-slate-400 mb-1">Upcoming Opponent Dossier</label>
+          <select id="opponentScoutSelect" onchange="updateSpecialTeams()" class="bg-slate-900 border border-slate-700 hover:border-ice-400 rounded-xl px-3.5 py-2 text-xs sm:text-sm font-semibold text-white">
+            <option value="BOS">Fri Nov 27 @ Boston Bruins (PK 79.49% • PP 21.4%)</option>
+            <option value="PIT">Sat Nov 28 @ Pittsburgh Penguins (PK 81.97% • PP 23.1%)</option>
+            <option value="PHI">Mon Nov 30 vs Philadelphia Flyers (PK 77.22% • PP 18.8%)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Left 5 Cols: SVG 1-3-1 PP Passing Network -->
+        <div class="xl:col-span-5 glass-card rounded-2xl p-5">
+          <h2 class="text-base font-bold text-white mb-1">TOR PP1 1-3-1 Passing Network &amp; Royal-Road Seam</h2>
+          <p class="text-xs text-slate-400 mb-3">18 PPG on 71 opportunities (25.35%). Line thickness = pass frequency.</p>
+
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+            <svg viewBox="0 0 420 310" class="w-full h-auto">
+              <path d="M 20,15 L 400,15 L 400,240 Q 400,295 330,295 L 90,295 Q 20,295 20,240 Z" fill="#0d1424" stroke="#334155" stroke-width="2"/>
+              <line x1="20" y1="32" x2="400" y2="32" stroke="#0284c7" stroke-width="4"/>
+              <line x1="32" y1="260" x2="388" y2="260" stroke="#e11d48" stroke-width="2"/>
+              <rect x="194" y="260" width="32" height="12" fill="none" stroke="#94a3b8" stroke-width="2"/>
+
+              <!-- Passing Edges -->
+              <line x1="210" y1="72" x2="92" y2="155" stroke="#38bdf8" stroke-width="4.5" opacity="0.8"/>
+              <line x1="210" y1="72" x2="328" y2="155" stroke="#38bdf8" stroke-width="5.5" opacity="0.85"/>
+              <!-- Royal Road Cross-Seam -->
+              <line x1="92" y1="155" x2="328" y2="155" stroke="#f43f5e" stroke-width="4" stroke-dasharray="6 3"/>
+              <text x="210" y="146" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono" font-size="9" font-weight="bold">ROYAL-ROAD SEAM (0.38 xG/Shot)</text>
+              <!-- Bumper & Net-Front Links -->
+              <line x1="328" y1="155" x2="210" y2="185" stroke="#10b981" stroke-width="3.5"/>
+              <line x1="92" y1="155" x2="210" y2="185" stroke="#10b981" stroke-width="3"/>
+              <line x1="328" y1="155" x2="210" y2="242" stroke="#fbbf24" stroke-width="3"/>
+
+              <!-- Player Nodes -->
+              <!-- Point: Raddysh -->
+              <circle cx="210" cy="72" r="22" fill="#00205B" stroke="#60A5FA" stroke-width="2"/>
+              <text x="210" y="70" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">Raddysh</text>
+              <text x="210" y="81" text-anchor="middle" fill="#93c5fd" font-family="JetBrains Mono" font-size="8">QB • 9A</text>
+
+              <!-- Left Flank: Matthews -->
+              <circle cx="92" cy="155" r="25" fill="#00205B" stroke="#f43f5e" stroke-width="2.5"/>
+              <text x="92" y="153" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">Matthews</text>
+              <text x="92" y="164" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono" font-size="8">5 PPG</text>
+
+              <!-- Right Flank: Nylander -->
+              <circle cx="328" cy="155" r="25" fill="#00205B" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="328" y="153" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">Nylander</text>
+              <text x="328" y="164" text-anchor="middle" fill="#7dd3fc" font-family="JetBrains Mono" font-size="8">4 PPG</text>
+
+              <!-- Bumper: McKenna -->
+              <circle cx="210" cy="185" r="22" fill="#00205B" stroke="#10b981" stroke-width="2"/>
+              <text x="210" y="183" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">McKenna</text>
+              <text x="210" y="194" text-anchor="middle" fill="#6ee7b7" font-family="JetBrains Mono" font-size="8">3 PPG</text>
+
+              <!-- Net-Front: Tavares -->
+              <circle cx="210" cy="242" r="21" fill="#00205B" stroke="#fbbf24" stroke-width="2"/>
+              <text x="210" y="240" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">Tavares</text>
+              <text x="210" y="251" text-anchor="middle" fill="#fde68a" font-family="JetBrains Mono" font-size="8">Net-Front</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Middle 3 Cols: PK Vulnerability Heatmap -->
+        <div class="xl:col-span-3 glass-card rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <h2 class="text-base font-bold text-white mb-1">PK Diamond/Box Audit</h2>
+            <p class="text-xs text-slate-400 mb-3">82.28% PK (65/79 killed • 14 PPGA).</p>
+
+            <div class="space-y-3 tabular-nums">
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300">Low-Slot Backdoor Seam</span>
+                  <span class="font-mono font-bold text-rose-400">6 PPGA (43%)</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full"><div class="h-full bg-rose-500 rounded-full" style="width: 43%"></div></div>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300">Flank One-Timer (Left/Right)</span>
+                  <span class="font-mono font-bold text-amber-400">5 PPGA (36%)</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full"><div class="h-full bg-amber-400 rounded-full" style="width: 36%"></div></div>
+              </div>
+
+              <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3">
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300">Point Traffic / Tip-In</span>
+                  <span class="font-mono font-bold text-ice-400">3 PPGA (21%)</span>
+                </div>
+                <div class="w-full h-2 bg-slate-800 rounded-full"><div class="h-full bg-ice-400 rounded-full" style="width: 21%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs font-mono space-y-1.5 tabular-nums">
+            <div class="flex justify-between"><span class="text-slate-400">PK1 Unit:</span><span class="text-white">Blueger-Paul / McCabe-Tanev</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">Clear% After FO Loss:</span><span class="text-emerald-400 font-bold">61.4% (5th NHL)</span></div>
+            <div class="flex justify-between"><span class="text-slate-400">Shorthanded Goals:</span><span class="text-ice-400">2 SHG</span></div>
+          </div>
+        </div>
+
+        <!-- Right 4 Cols: Opponent Pre-Scout Dossier -->
+        <div class="xl:col-span-4 glass-card rounded-2xl p-5 flex flex-col justify-between" id="opponentDossierCard"></div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 5: ROSTER & CAP SIMULATOR                                      -->
+    <!-- ===================================================================== -->
+    <section id="view-cap" class="hidden space-y-5">
+      <div class="glass-card rounded-2xl p-5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold">Dashboard 05 // GM John Chayka Cap Architecture</span>
+            <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">2026–27 Maple Leafs Salary Cap &amp; LTIR Compliance Simulator</h1>
+          </div>
+          <div class="flex items-center gap-3">
+            <button onclick="resetCapSimulator()" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white border border-slate-700 transition">
+              Reset 2026–27 Ledger
+            </button>
+            <div class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono tabular-nums">
+              <span class="text-slate-400">2026–27 Upper Limit:</span>
+              <span class="text-white font-bold ml-1">$104,000,000</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 tabular-nums">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-3">
+            <div>
+              <p class="text-[11px] font-mono uppercase text-slate-400">Total Commitments</p>
+              <p id="capUsedDisplay" class="text-lg sm:text-xl font-mono font-bold text-white mt-0.5">$112,190,000</p>
+            </div>
+            <div>
+              <p class="text-[11px] font-mono uppercase text-slate-400">Active LTIR Relief Pool</p>
+              <p id="ltirPoolDisplay" class="text-lg sm:text-xl font-mono font-bold text-leafs-400 mt-0.5">$8,812,600</p>
+            </div>
+            <div>
+              <p class="text-[11px] font-mono uppercase text-slate-400">Deadline Accrual Space</p>
+              <p id="capSpaceDisplay" class="text-lg sm:text-xl font-mono font-bold text-emerald-400 mt-0.5">$622,600</p>
+            </div>
+            <div>
+              <p class="text-[11px] font-mono uppercase text-slate-400">Projected Team WAR</p>
+              <p id="teamWarDisplay" class="text-lg sm:text-xl font-mono font-bold text-amber-400 mt-0.5">24.8 WAR</p>
+            </div>
+          </div>
+
+          <div class="w-full h-3 bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-700">
+            <div id="capProgressBar" class="h-full rounded-full bg-gradient-to-r from-leafs-500 via-emerald-400 to-amber-400 transition-all duration-300" style="width: 99.4%"></div>
+          </div>
+          <div class="flex flex-wrap justify-between text-[11px] font-mono text-slate-400 mt-1.5">
+            <span>2026–27 Floor: $76.9M</span>
+            <span id="capStatusLabel" class="text-emerald-400 font-semibold">LTIR COMPLIANT • DOMI ($3.75M, Sept 30 Back) &amp; MERZLIKINS ($4.428M) ON LTIR</span>
+            <span>Ceiling + LTIR: $112.81M</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Left 7 Cols: Interactive Roster & LTIR Table -->
+        <div class="xl:col-span-7 glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-base font-bold text-white">2026–27 Roster &amp; LTIR Status Ledger</h2>
+              <p class="text-xs text-slate-400">Toggle status between ACTIVE, LTIR, and AHL to model cap relief in real time.</p>
+            </div>
+            <span class="text-xs font-mono text-slate-400">Click Status Pill to Cycle</span>
+          </div>
+          <div class="overflow-x-auto max-h-[440px] overflow-y-auto border border-slate-800 rounded-xl">
+            <table class="w-full text-left border-collapse tabular-nums">
+              <thead class="sticky top-0 bg-slate-900 border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400">
+                <tr>
+                  <th class="py-2.5 px-3">Player</th>
+                  <th class="py-2.5 px-2">Pos</th>
+                  <th class="py-2.5 px-2 text-right">26-27 Cap Hit</th>
+                  <th class="py-2.5 px-2 text-right">Expiry</th>
+                  <th class="py-2.5 px-2 text-right">Proj WAR</th>
+                  <th class="py-2.5 px-3 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody id="rosterCapTableBody" class="divide-y divide-slate-800/70 text-xs sm:text-sm font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: WAR vs Cap Hit Scatter Plot -->
+        <div class="xl:col-span-5 glass-card rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <h2 class="text-base font-bold text-white mb-1">Contract Efficiency: WAR vs. Cap Hit</h2>
+            <p class="text-xs text-slate-400 mb-3">ELCs McKenna ($1.075M) &amp; Cowan ($900K) generate top-decile surplus value.</p>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+              <svg viewBox="0 0 460 340" class="w-full h-auto">
+                <line x1="55" y1="295" x2="435" y2="295" stroke="#334155" stroke-width="1.5"/>
+                <line x1="55" y1="25" x2="55" y2="295" stroke="#334155" stroke-width="1.5"/>
+                <line x1="55" y1="227" x2="435" y2="227" stroke="#1e293b" stroke-dasharray="3 3"/>
+                <line x1="55" y1="160" x2="435" y2="160" stroke="#1e293b" stroke-dasharray="3 3"/>
+                <line x1="55" y1="92" x2="435" y2="92" stroke="#1e293b" stroke-dasharray="3 3"/>
+                <line x1="55" y1="280" x2="425" y2="55" stroke="#3B82F6" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.75"/>
+                <text x="315" y="102" fill="#60A5FA" font-family="JetBrains Mono" font-size="10" transform="rotate(-31 315,102)">Market Value Curve</text>
+                <text x="245" y="330" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10">Annual Cap Hit ($ Millions)</text>
+                <text x="16" y="160" text-anchor="middle" fill="#94a3b8" font-family="JetBrains Mono" font-size="10" transform="rotate(-90 16,160)">Projected WAR</text>
+                <text x="55" y="311" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">$0M</text>
+                <text x="150" y="311" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">$3.5M</text>
+                <text x="245" y="311" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">$7.0M</text>
+                <text x="340" y="311" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">$10.5M</text>
+                <text x="430" y="311" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">$14M</text>
+                <text x="45" y="298" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">-1.0</text>
+                <text x="45" y="230" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">0.8</text>
+                <text x="45" y="163" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">2.5</text>
+                <text x="45" y="95" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">4.3</text>
+                <text x="45" y="30" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">6.0</text>
+                <g id="scatterPointsGroup"></g>
+              </svg>
+            </div>
+          </div>
+
+          <div class="mt-3 bg-slate-900/90 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 leading-relaxed">
+            <strong class="text-white">Cap Audit Summary:</strong> ELC standouts <span class="text-emerald-400 font-semibold">Gavin McKenna ($1.075M)</span> &amp; <span class="text-emerald-400 font-semibold">Easton Cowan ($900K)</span> plus <span class="text-ice-400 font-semibold">Anthony Stolarz ($2.50M)</span> subsidize negative-WAR drag from <span class="text-rose-400 font-semibold">Sergei Bobrovsky ($7.00M)</span> and <span class="text-rose-400 font-semibold">Morgan Rielly ($7.50M)</span>.
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 6: PRO SCOUTING & TRADE TARGET "FIT FINDER"                    -->
+    <!-- ===================================================================== -->
+    <section id="view-trade" class="hidden space-y-5">
+      <div class="glass-card rounded-2xl p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-ice-400 font-bold">Dashboard 06 // Pro Scouting Cosine-Similarity Engine</span>
+          <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">Trade Target "Fit Finder" &amp; Line-Chemistry Sandbox</h1>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <select id="tradePosFilter" onchange="renderTradeFinder()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold text-white">
+            <option value="ALL">All Needs (RHD / Middle-6 C / Top-9 LW)</option>
+            <option value="RHD">Shutdown RHD (Priority #1)</option>
+            <option value="C">Middle-6 Center</option>
+            <option value="LW">Top-9 Forechecking LW</option>
+          </select>
+
+          <select id="tradeMaxCapFilter" onchange="renderTradeFinder()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-semibold text-white">
+            <option value="10">Max Cap Hit: Any</option>
+            <option value="5">Max Cap Hit: &le; $5.0M</option>
+            <option value="3.5">Max Cap Hit: &le; $3.5M</option>
+          </select>
+
+          <label class="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs font-mono text-amber-300 cursor-pointer">
+            <input type="checkbox" id="tradeRetentionCheck" checked onchange="renderTradeFinder()" />
+            50% Seller Retention
+          </label>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Left 5 Cols: Roster Gap Radar Overlay -->
+        <div class="xl:col-span-5 glass-card rounded-2xl p-5 flex flex-col justify-between">
+          <div>
+            <h2 class="text-base font-bold text-white mb-1">Roster Gap Radar Overlay (NHL Percentiles)</h2>
+            <p class="text-xs text-slate-400 mb-3">Toronto baseline (blue) vs. selected trade target boost (emerald).</p>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+              <svg viewBox="0 0 380 300" class="w-full h-auto">
+                <!-- Radar Pentagon Rings -->
+                <polygon points="190,40 315,130 267,265 113,265 65,130" fill="none" stroke="#1e293b" stroke-width="1.5"/>
+                <polygon points="190,77 277,140 244,235 136,235 103,140" fill="none" stroke="#1e293b" stroke-width="1"/>
+                <polygon points="190,115 240,150 221,205 159,205 140,150" fill="none" stroke="#1e293b" stroke-width="1"/>
+                <!-- Spokes -->
+                <line x1="190" y1="160" x2="190" y2="40" stroke="#334155" stroke-width="1"/>
+                <line x1="190" y1="160" x2="315" y2="130" stroke="#334155" stroke-width="1"/>
+                <line x1="190" y1="160" x2="267" y2="265" stroke="#334155" stroke-width="1"/>
+                <line x1="190" y1="160" x2="113" y2="265" stroke="#334155" stroke-width="1"/>
+                <line x1="190" y1="160" x2="65" y2="130" stroke="#334155" stroke-width="1"/>
+
+                <!-- Axis Labels -->
+                <text x="190" y="25" text-anchor="middle" fill="#cbd5e1" font-family="JetBrains Mono" font-size="9">PP Finishing (88th)</text>
+                <text x="322" y="128" text-anchor="start" fill="#cbd5e1" font-family="JetBrains Mono" font-size="9">C FOW% (78th)</text>
+                <text x="275" y="282" text-anchor="start" fill="#fca5a5" font-family="JetBrains Mono" font-size="9">RHD PK (31st)</text>
+                <text x="105" y="282" text-anchor="end" fill="#fca5a5" font-family="JetBrains Mono" font-size="9">xGA Suppr (18th)</text>
+                <text x="58" y="128" text-anchor="end" fill="#fca5a5" font-family="JetBrains Mono" font-size="9">DZ Exit (24th)</text>
+
+                <!-- TOR Baseline Polygon -->
+                <polygon points="190,54 287,137 214,193 176,179 160,153" fill="#3B82F6" fill-opacity="0.3" stroke="#60A5FA" stroke-width="2"/>
+                <!-- Post-Trade Overlay Polygon -->
+                <polygon id="radarBoostPolygon" points="190,52 292,135 252,244 132,238 108,142" fill="#10b981" fill-opacity="0.22" stroke="#10b981" stroke-width="2" stroke-dasharray="4 3"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Line-Chemistry Projection Sandbox -->
+          <div id="chemistrySandboxBox" class="mt-3 bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 text-xs"></div>
+        </div>
+
+        <!-- Right 7 Cols: Trade Target Similarity & Fit Engine -->
+        <div class="xl:col-span-7 glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-base font-bold text-white">Cosine-Similarity Trade Targets</h2>
+              <p class="text-xs text-slate-400">Click a target to preview radar boost or push directly into Cap Simulator.</p>
+            </div>
+            <span id="tradeToastMsg" class="text-xs font-mono text-emerald-400"></span>
+          </div>
+          <div class="space-y-3" id="tradeTargetsList"></div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 7: PLAYOFF ODDS & SEASON TRAJECTORY SIMULATOR                  -->
+    <!-- ===================================================================== -->
+    <section id="view-playoffs" class="hidden space-y-5">
+      <div class="glass-card rounded-2xl p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-mono uppercase tracking-wider text-amber-400 font-bold">Dashboard 07 // 10,000-Season Monte Carlo Engine</span>
+            <span class="px-2 py-0.5 rounded bg-slate-900 text-slate-300 border border-slate-700 font-mono text-[11px] tabular-nums">Current: 26 GP • 9-14-3 • 21 PTS (.404) • 56 GP Remaining</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">Season Trajectory, Playoff Cutline &amp; Atlantic Regression</h1>
+        </div>
+      </div>
+
+      <!-- Interactive Monte Carlo Controls + Outputs -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div class="lg:col-span-4 glass-card rounded-2xl p-5 space-y-4">
+          <h2 class="text-base font-bold text-white">Monte Carlo What-If Sliders</h2>
+          <p class="text-xs text-slate-400">Adjust structural D-zone fixes and goaltending regression over the final 56 games.</p>
+
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-slate-300">5v5 xGF% Improvement (from 47.3%)</span>
+              <span id="sliderXgfVal" class="text-ice-400 font-bold">+2.2% (49.5%)</span>
+            </div>
+            <input type="range" id="xgfBoostSlider" min="0" max="4.5" step="0.5" value="2.2" oninput="updatePlayoffSim()" class="w-full" />
+          </div>
+
+          <div>
+            <div class="flex justify-between text-xs font-mono mb-1">
+              <span class="text-slate-300">Team SV% Regression (from .887)</span>
+              <span id="sliderSvVal" class="text-emerald-400 font-bold">.903 SV%</span>
+            </div>
+            <input type="range" id="svRegressSlider" min="0.887" max="0.912" step="0.003" value="0.903" oninput="updatePlayoffSim()" class="w-full" />
+          </div>
+
+          <div class="pt-3 border-t border-slate-800 space-y-2.5 tabular-nums font-mono">
+            <div class="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-400">Eastern Playoff Odds:</span>
+              <span id="playoffOddsDisplay" class="text-lg font-bold text-amber-400">34.6%</span>
+            </div>
+            <div class="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-400">Median Final Points (50th):</span>
+              <span id="medianPtsDisplay" class="text-lg font-bold text-white">91 PTS</span>
+            </div>
+            <div class="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-400">25th / 75th Percentile Range:</span>
+              <span id="pctRangeDisplay" class="text-sm font-bold text-ice-400">85 – 97 PTS</span>
+            </div>
+            <div class="flex justify-between items-center bg-slate-900 p-3 rounded-xl border border-slate-800">
+              <span class="text-xs text-slate-400">Pace Needed for 96-Pt Cutline:</span>
+              <span class="text-xs font-bold text-emerald-400">75 PTS / 56 GP (.670)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 8 Cols: Fan Chart + Atlantic Division Regression Table -->
+        <div class="lg:col-span-8 flex flex-col gap-5">
+          <div class="glass-card rounded-2xl p-5">
+            <div class="flex items-center justify-between mb-2">
+              <h2 class="text-base font-bold text-white">82-Game Points Trajectory Fan Chart (25th / 50th / 75th)</h2>
+              <span class="text-xs font-mono text-rose-400">East Wildcard Cutline: 96 PTS</span>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+              <svg viewBox="0 0 600 220" class="w-full h-auto">
+                <line x1="45" y1="190" x2="575" y2="190" stroke="#334155" stroke-width="1.5"/>
+                <line x1="45" y1="20" x2="45" y2="190" stroke="#334155" stroke-width="1.5"/>
+                <!-- 96 Pt Cutline -->
+                <line x1="45" y1="56" x2="575" y2="56" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="5 4"/>
+                <text x="570" y="50" text-anchor="end" fill="#fda4af" font-family="JetBrains Mono" font-size="9" font-weight="bold">96 PTS Playoff Cutline</text>
+                <!-- GP 26 Marker -->
+                <line x1="213" y1="20" x2="213" y2="190" stroke="#475569" stroke-dasharray="3 3"/>
+                <text x="213" y="206" text-anchor="middle" fill="#38bdf8" font-family="JetBrains Mono" font-size="9" font-weight="bold">GP 26 (21 PTS)</text>
+                <text x="45" y="206" text-anchor="middle" fill="#64748b" font-family="JetBrains Mono" font-size="9">GP 0</text>
+                <text x="570" y="206" text-anchor="end" fill="#64748b" font-family="JetBrains Mono" font-size="9">GP 82</text>
+
+                <!-- Fan Area -->
+                <polygon id="fanConePolygon" points="213,160 575,54 575,72" fill="#38bdf8" fill-opacity="0.18"/>
+                <!-- Actual GP 0..26 -->
+                <polyline points="45,190 95,180 155,169 213,160" fill="none" stroke="#ffffff" stroke-width="3"/>
+                <circle cx="213" cy="160" r="4.5" fill="#38bdf8"/>
+                <!-- Median Projection Line -->
+                <line id="medianProjLine" x1="213" y1="160" x2="575" y2="63" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="5 3"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl p-5">
+            <h2 class="text-base font-bold text-white mb-2">Atlantic Division Underlying Regression Table (5v5)</h2>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse tabular-nums">
+                <thead>
+                  <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400">
+                    <th class="py-2 px-3">Atlantic Team</th>
+                    <th class="py-2 px-2 text-right">PTS%</th>
+                    <th class="py-2 px-2 text-right">5v5 xGF%</th>
+                    <th class="py-2 px-2 text-right">5v5 PDO</th>
+                    <th class="py-2 px-3 text-right">Regression Outlook</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800/60 text-xs font-mono">
+                  <tr>
+                    <td class="py-2 px-3 font-sans font-semibold text-slate-200">Florida Panthers</td>
+                    <td class="py-2 px-2 text-right text-white">.654</td>
+                    <td class="py-2 px-2 text-right text-emerald-400">54.1%</td>
+                    <td class="py-2 px-2 text-right text-slate-300">100.8</td>
+                    <td class="py-2 px-3 text-right text-emerald-400">Sustainable Contender</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-3 font-sans font-semibold text-slate-200">Tampa Bay Lightning</td>
+                    <td class="py-2 px-2 text-right text-white">.615</td>
+                    <td class="py-2 px-2 text-right text-emerald-400">52.4%</td>
+                    <td class="py-2 px-2 text-right text-slate-300">101.2</td>
+                    <td class="py-2 px-3 text-right text-slate-300">Neutral</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-3 font-sans font-semibold text-slate-200">Boston Bruins</td>
+                    <td class="py-2 px-2 text-right text-white">.577</td>
+                    <td class="py-2 px-2 text-right text-amber-400">49.8%</td>
+                    <td class="py-2 px-2 text-right text-amber-400">102.4</td>
+                    <td class="py-2 px-3 text-right text-amber-400">Downward Regression Target</td>
+                  </tr>
+                  <tr>
+                    <td class="py-2 px-3 font-sans font-semibold text-slate-200">Ottawa Senators</td>
+                    <td class="py-2 px-2 text-right text-white">.538</td>
+                    <td class="py-2 px-2 text-right text-slate-300">50.6%</td>
+                    <td class="py-2 px-2 text-right text-slate-300">100.1</td>
+                    <td class="py-2 px-3 text-right text-slate-300">Wildcard Bubble</td>
+                  </tr>
+                  <tr class="bg-leafs-900/35">
+                    <td class="py-2 px-3 font-sans font-bold text-white">Toronto Maple Leafs (7th)</td>
+                    <td class="py-2 px-2 text-right text-amber-400 font-bold">.404</td>
+                    <td class="py-2 px-2 text-right text-slate-200">47.3%</td>
+                    <td class="py-2 px-2 text-right text-rose-400 font-bold">98.6</td>
+                    <td class="py-2 px-3 text-right text-emerald-400 font-bold">+140 BPS PDO Bounce Candidate</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 8: 2026 DRAFT & PROSPECT HUB                                   -->
+    <!-- ===================================================================== -->
+    <section id="view-draft" class="hidden space-y-5">
+      <!-- #1 Overall Pick Rookie Spotlight -->
+      <div class="glass-card rounded-2xl p-5 border-l-4 border-l-leafs-400">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-leafs-900 text-white font-mono text-xs font-bold border border-leafs-400/50">2026 #1 OVERALL PICK</span>
+              <span class="text-xs font-mono text-emerald-400">Age 19 &bull; L2 Wing w/ Tavares &amp; Nylander &bull; PP1 Bumper</span>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-bold text-white mt-1.5">Gavin McKenna — 2026–27 NHL Rookie Telemetry (26 GP)</h1>
+            <p class="text-xs sm:text-sm text-slate-300 mt-1">Generating top-decile rookie scoring efficiency (2.48 P/60 all-situations) with 3 power-play goals while protected at 58.4% offensive zone starts.</p>
+          </div>
+
+          <div class="grid grid-cols-5 gap-2.5 shrink-0 font-mono tabular-nums">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center">
+              <p class="text-[10px] text-slate-400">GP / PTS</p>
+              <p class="text-sm sm:text-base font-bold text-white">26 / 15</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center">
+              <p class="text-[10px] text-slate-400">G - A</p>
+              <p class="text-sm sm:text-base font-bold text-emerald-400">7G - 8A</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center">
+              <p class="text-[10px] text-slate-400">PPG</p>
+              <p class="text-sm sm:text-base font-bold text-ice-400">3 PPG</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center">
+              <p class="text-[10px] text-slate-400">TOI/GP</p>
+              <p class="text-sm sm:text-base font-bold text-amber-400">13:59</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-center">
+              <p class="text-[10px] text-slate-400">SOG/GP</p>
+              <p class="text-sm sm:text-base font-bold text-slate-200">1.7</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Left 7 Cols: Sortable 2026 Draft Class & NHLe Table -->
+        <div class="xl:col-span-7 glass-card rounded-2xl p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div>
+              <h2 class="text-base font-bold text-white">2026 Draft Class &amp; NHLe Translation Board</h2>
+              <p class="text-xs text-slate-400">Click column headers to sort by NHLe (82G), pStar%, or Scout Grade.</p>
+            </div>
+            <select id="draftPosFilter" onchange="renderDraftTable()" class="bg-slate-900 border border-slate-700 rounded-xl px-3 py-1.5 text-xs text-white">
+              <option value="ALL">All Positions</option>
+              <option value="F">Forwards</option>
+              <option value="D">Defensemen</option>
+            </select>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse tabular-nums">
+              <thead>
+                <tr class="border-b border-slate-800 text-[11px] font-mono uppercase text-slate-400 select-none">
+                  <th onclick="sortDraftTable('pick')" class="py-2.5 px-2.5 cursor-pointer hover:text-ice-400">Pick ↕</th>
+                  <th class="py-2.5 px-2.5">Prospect</th>
+                  <th class="py-2.5 px-2">Pos</th>
+                  <th class="py-2.5 px-2">2026–27 Club</th>
+                  <th onclick="sortDraftTable('nhle')" class="py-2.5 px-2 text-right cursor-pointer hover:text-ice-400">NHLe ↕</th>
+                  <th onclick="sortDraftTable('pStar')" class="py-2.5 px-2 text-right cursor-pointer hover:text-ice-400">pStar% ↕</th>
+                  <th onclick="sortDraftTable('pNhl')" class="py-2.5 px-2 text-right cursor-pointer hover:text-ice-400">pNHL% ↕</th>
+                  <th class="py-2.5 px-2.5 text-center">Grade</th>
+                </tr>
+              </thead>
+              <tbody id="draftTableBody" class="divide-y divide-slate-800/70 text-xs font-mono"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: Toronto Marlies (AHL) Call-Up Readiness Tracker -->
+        <div class="xl:col-span-5 glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-base font-bold text-white">Toronto Marlies (AHL) Call-Up Tracker</h2>
+              <p class="text-xs text-slate-400">Primary P/60, waiver status, and NHL recall readiness.</p>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[11px]">AHL Pipeline</span>
+          </div>
+
+          <div class="space-y-2.5 tabular-nums">
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+              <div>
+                <p class="text-sm font-bold text-white">Artur Akhtyamov <span class="text-xs font-mono text-slate-400">(G • Age 25)</span></p>
+                <p class="text-xs font-mono text-slate-400">11 GP: 7-3-1 &bull; .916 SV% &bull; +5.2 AHL GSAx</p>
+              </div>
+              <span class="px-2 py-1 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-[10px] font-bold">NHL READY</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+              <div>
+                <p class="text-sm font-bold text-white">Brendan Brisson <span class="text-xs font-mono text-slate-400">(C/LW • Age 25)</span></p>
+                <p class="text-xs font-mono text-slate-400">18 GP: 8G-11A-19P &bull; 2.64 Pri P/60</p>
+              </div>
+              <span class="px-2 py-1 rounded bg-ice-500/15 text-ice-400 border border-ice-500/30 font-mono text-[10px] font-bold">TOP-9 CALLUP</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+              <div>
+                <p class="text-sm font-bold text-white">Ryan Tverberg <span class="text-xs font-mono text-slate-400">(C/RW • Age 24)</span></p>
+                <p class="text-xs font-mono text-slate-400">17 GP: 6G-9A-15P &bull; 2.21 Pri P/60 &bull; PK1</p>
+              </div>
+              <span class="px-2 py-1 rounded bg-ice-500/15 text-ice-400 border border-ice-500/30 font-mono text-[10px] font-bold">ENERGY / PK</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+              <div>
+                <p class="text-sm font-bold text-white">Bo Groulx <span class="text-xs font-mono text-slate-400">(C • Age 26)</span></p>
+                <p class="text-xs font-mono text-slate-400">18 GP: 7G-8A-15P &bull; 56.8% AHL FOW%</p>
+              </div>
+              <span class="px-2 py-1 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 font-mono text-[10px] font-bold">4C DEPTH</span>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between">
+              <div>
+                <p class="text-sm font-bold text-white">Luke Haymes <span class="text-xs font-mono text-slate-400">(C • Age 23)</span></p>
+                <p class="text-xs font-mono text-slate-400">16 GP: 5G-7A-12P &bull; Waiver Exempt</p>
+              </div>
+              <span class="px-2 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700 font-mono text-[10px] font-bold">DEVELOPING</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ===================================================================== -->
+    <!-- MODULE 9: GOALTENDING & HIGH-PERFORMANCE LAB                          -->
+    <!-- ===================================================================== -->
+    <section id="view-goalie" class="hidden space-y-5">
+      <div class="glass-card rounded-2xl p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-wider text-rose-400 font-bold">Dashboard 09 // Goaltending Biomechanics &amp; Sports Science</span>
+          <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">Tandem GSAx Comparison &amp; Catapult GPS ACWR Monitor</h1>
+        </div>
+        <div class="text-xs font-mono bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 tabular-nums">
+          <span class="text-slate-400">Team Tandem Split (26 GP):</span>
+          <span class="text-emerald-400 font-bold ml-1">Stolarz +3.4 GSAx</span>
+          <span class="text-slate-600 mx-1.5">|</span>
+          <span class="text-rose-400 font-bold">Bobrovsky -6.8 GSAx</span>
+        </div>
+      </div>
+
+      <!-- Side-by-Side 2026-27 Goaltender Comparison Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 tabular-nums">
+        <div class="glass-card rounded-2xl p-5 border-t-4 border-t-emerald-400">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-lg font-bold text-white">#41 Anthony Stolarz</h2>
+              <p class="text-xs font-mono text-slate-400">12 GP (12 GS) &bull; Record: 6-5-1 &bull; $2.50M AAV</p>
+            </div>
+            <span class="px-3 py-1.5 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono font-bold text-sm">+3.4 GSAx</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2.5 font-mono text-center">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5">
+              <p class="text-[10px] text-slate-400">GAA</p>
+              <p class="text-base font-bold text-white">2.76</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5">
+              <p class="text-[10px] text-slate-400">SV%</p>
+              <p class="text-base font-bold text-emerald-400">.902</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5">
+              <p class="text-[10px] text-slate-400">HDSV%</p>
+              <p class="text-base font-bold text-ice-400">.846</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5">
+              <p class="text-[10px] text-slate-400">QS%</p>
+              <p class="text-base font-bold text-slate-200">58.3%</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 border-t-4 border-t-rose-500">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-lg font-bold text-white">#72 Sergei Bobrovsky</h2>
+              <p class="text-xs font-mono text-slate-400">14 GP (14 GS) &bull; Record: 3-9-2 &bull; $7.00M AAV</p>
+            </div>
+            <span class="px-3 py-1.5 rounded-xl bg-rose-500/15 text-rose-400 border border-rose-500/30 font-mono font-bold text-sm">-6.8 GSAx</span>
+          </div>
+          <div class="grid grid-cols-4 gap-2.5 font-mono text-center">
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5">
+              <p class="text-[10px] text-slate-400">GAA</p>
+              <p class="text-base font-bold text-rose-400">3.65</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5">
+              <p class="text-[10px] text-slate-400">SV%</p>
+              <p class="text-base font-bold text-rose-400">.874</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5">
+              <p class="text-[10px] text-slate-400">HDSV%</p>
+              <p class="text-base font-bold text-amber-400">.782</p>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-2.5">
+              <p class="text-[10px] text-slate-400">QS%</p>
+              <p class="text-base font-bold text-slate-200">35.7%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-5">
+        <!-- Left 5 Cols: GSAx by Shot Danger & Pre-Shot Movement -->
+        <div class="xl:col-span-5 glass-card rounded-2xl p-5 space-y-3.5 tabular-nums">
+          <h2 class="text-base font-bold text-white">GSAx by Shot Danger &amp; Pre-Shot Movement</h2>
+          <p class="text-xs text-slate-400">Comparing Stolarz vs. Bobrovsky across shot-type categories.</p>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3 space-y-2">
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-slate-200 font-sans font-semibold">Perimeter / Unscreened Shots</span>
+              <span><strong class="text-emerald-400">Stolarz +0.9</strong> | <strong class="text-slate-400">Bob -0.4</strong></span>
+            </div>
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-slate-200 font-sans font-semibold">Mid-Slot Wrist / Snap Shots</span>
+              <span><strong class="text-emerald-400">Stolarz +1.2</strong> | <strong class="text-amber-400">Bob -1.1</strong></span>
+            </div>
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-slate-200 font-sans font-semibold">High-Danger Rebounds &amp; Screens</span>
+              <span><strong class="text-emerald-400">Stolarz +1.8</strong> | <strong class="text-rose-400">Bob -3.1</strong></span>
+            </div>
+            <div class="flex justify-between text-xs font-mono">
+              <span class="text-slate-200 font-sans font-semibold">Royal-Road Cross-Ice One-Timers</span>
+              <span><strong class="text-amber-400">Stolarz -0.5</strong> | <strong class="text-rose-400">Bob -2.2</strong></span>
+            </div>
+          </div>
+
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 leading-relaxed">
+            <strong class="text-ice-400">Goalie Lab Recommendation:</strong> Shift start share to <strong class="text-white">65% Stolarz / 35% Bobrovsky</strong> during the Atlantic road swing while refining Bobrovsky's post-integration depth on cross-seam passes.
+          </div>
+        </div>
+
+        <!-- Right 7 Cols: Catapult GPS & ACWR Traffic-Light Readiness Monitor -->
+        <div class="xl:col-span-7 glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <h2 class="text-base font-bold text-white">Catapult GPS &amp; ACWR Fatigue Traffic-Light Monitor</h2>
+              <p class="text-xs text-slate-400">Optimal ACWR: 0.85–1.25. Red (&gt;1.30) triggers morning-skate maintenance protocol.</p>
+            </div>
+            <span class="text-xs font-mono text-amber-400">B2B Alert: Nov 27–28</span>
+          </div>
+
+          <div class="space-y-2.5 tabular-nums">
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-rose-500 shrink-0"></span>
+                <div>
+                  <p class="text-sm font-bold text-white">Darren Raddysh <span class="text-xs font-mono text-slate-400">(RD • 23:52 TOI/GP)</span></p>
+                  <p class="text-xs text-slate-400">16.8 km &gt;20 km/h (7d) &bull; Optional Morning Skate Protocol</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5 font-mono text-xs">
+                <span class="text-white font-bold">ACWR 1.36</span>
+                <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/30 font-bold">RED</span>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-rose-500 shrink-0"></span>
+                <div>
+                  <p class="text-sm font-bold text-white">Auston Matthews <span class="text-xs font-mono text-slate-400">(C • 20:50 TOI/GP)</span></p>
+                  <p class="text-xs text-slate-400">15.4 km &gt;20 km/h (7d) &bull; Off-Ice Recovery + Cap Practice Reps</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5 font-mono text-xs">
+                <span class="text-white font-bold">ACWR 1.31</span>
+                <span class="px-2 py-0.5 rounded bg-rose-500/15 text-rose-400 border border-rose-500/30 font-bold">RED</span>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-amber-400 shrink-0"></span>
+                <div>
+                  <p class="text-sm font-bold text-white">Jake McCabe <span class="text-xs font-mono text-slate-400">(LD • 20:09 TOI/GP)</span></p>
+                  <p class="text-xs text-slate-400">Heavy PK1 &amp; Shot-Block Impact &bull; Soft-Tissue Flush</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5 font-mono text-xs">
+                <span class="text-white font-bold">ACWR 1.27</span>
+                <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 font-bold">AMBER</span>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-amber-400 shrink-0"></span>
+                <div>
+                  <p class="text-sm font-bold text-white">William Nylander <span class="text-xs font-mono text-slate-400">(RW • 19:57 TOI/GP)</span></p>
+                  <p class="text-xs text-slate-400">High Burst Acceleration Load &bull; Standard Maintenance</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5 font-mono text-xs">
+                <span class="text-white font-bold">ACWR 1.22</span>
+                <span class="px-2 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 font-bold">AMBER</span>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div class="flex items-center gap-3">
+                <span class="w-3 h-3 rounded-full bg-emerald-400 shrink-0"></span>
+                <div>
+                  <p class="text-sm font-bold text-white">Oliver Ekman-Larsson <span class="text-xs font-mono text-slate-400">(LD • 18:44 TOI/GP)</span></p>
+                  <p class="text-xs text-slate-400">11.9 km &gt;20 km/h (7d) &bull; Cleared for Full B2B Workload</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5 font-mono text-xs">
+                <span class="text-white font-bold">ACWR 1.08</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-bold">GREEN</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- OPTICAL SHIFT VIDEO CLIP MODAL -->
+  <div id="videoModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card max-w-2xl w-full rounded-2xl overflow-hidden border border-ice-400/50 shadow-2xl">
+      <div class="flex items-center justify-between px-5 py-3.5 border-b border-slate-800 bg-slate-900">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+          <h3 id="videoModalTitle" class="text-sm font-bold text-white">Shift Video Cutup</h3>
+        </div>
+        <button onclick="closeVideoModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="p-5 bg-slate-950">
+        <div class="relative aspect-video rounded-xl bg-slate-900 border border-slate-800 overflow-hidden flex flex-col justify-between p-4">
+          <div class="flex justify-between items-start text-[11px] font-mono">
+            <span class="bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded text-ice-400">60Hz OPTICAL TRACKING REPLAY</span>
+            <span class="bg-slate-950/80 border border-slate-800 px-2.5 py-1 rounded text-emerald-400">SHOT VELOCITY: 89.2 MPH &bull; xG: 0.34</span>
+          </div>
+          <svg viewBox="0 0 400 160" class="w-full h-32 my-auto">
+            <rect x="20" y="10" width="360" height="140" rx="14" fill="#0d1424" stroke="#1e293b" stroke-width="2"/>
+            <line x1="200" y1="10" x2="200" y2="150" stroke="#0284c7" stroke-width="2" stroke-dasharray="4 4"/>
+            <path d="M 85,115 Q 190,130 280,52" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="5 3"/>
+            <path d="M 280,52 L 340,80" fill="none" stroke="#f43f5e" stroke-width="3"/>
+            <circle cx="85" cy="115" r="8" fill="#00205B" stroke="#60A5FA" stroke-width="1.5"/><text x="85" y="118" text-anchor="middle" fill="#fff" font-size="8" font-family="JetBrains Mono">39</text>
+            <circle cx="280" cy="52" r="8" fill="#00205B" stroke="#10b981" stroke-width="1.5"/><text x="280" y="55" text-anchor="middle" fill="#fff" font-size="8" font-family="JetBrains Mono">34</text>
+            <circle cx="340" cy="80" r="5" fill="#f43f5e"/>
+          </svg>
+          <div class="flex items-center justify-between text-xs font-mono text-slate-400">
+            <span>00:08.0 Optical Telemetry Cutup</span>
+            <span id="videoModalTimestamp" class="text-white">Nov 23, 2026 • TOR 4 @ NYI 2</span>
+          </div>
+        </div>
+        <div class="mt-3 flex items-center justify-between">
+          <p class="text-xs text-slate-400">Tagged Unit: <span id="videoModalPlayers" class="text-white font-semibold"></span></p>
+          <button onclick="closeVideoModal()" class="px-4 py-1.5 rounded-lg bg-leafs-800 hover:bg-leafs-500 text-white font-bold text-xs transition">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLETE ANALYTICS ENGINE JAVASCRIPT -->
+  <script>
+    // =========================================================================
+    // 1. TAB SWITCHER ACROSS ALL 9 DASHBOARDS
+    // =========================================================================
+    function switchTab(tabId) {
+      const allTabs = ['tactical', 'bench', 'forensics', 'special', 'cap', 'trade', 'playoffs', 'draft', 'goalie'];
+      allTabs.forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        const btn = document.getElementById(`tab-${t}`);
+        if (t === tabId) {
+          view.classList.remove('hidden');
+          btn.className = 'nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap bg-leafs-900 text-white border border-leafs-400/60 shadow-sm';
+        } else {
+          view.classList.add('hidden');
+          btn.className = 'nav-tab px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent';
+        }
+      });
+    }
+
+    // =========================================================================
+    // 2. DASHBOARD 1: 5v5 TACTICAL & LINE CHEMISTRY
+    // =========================================================================
+    const tacticalData = {
+      L1: {
+        tagged: 'Paul (9P) – Matthews (34P) – Cowan (18P)',
+        kpis: [
+          { label: '5v5 Time on Ice', val: '260:35', sub: '10:01 TOI/GP Together', pos: true },
+          { label: '5v5 Corsi For %', val: '53.8%', sub: '+5.1% vs Team (48.7%)', pos: true },
+          { label: '5v5 xGF%', val: '54.2%', sub: '3.12 xGF/60 • 2.64 xGA/60', pos: true },
+          { label: 'Actual Goal Diff', val: '+12', sub: '24 GF – 12 GA (Matthews +12)', pos: true }
+        ],
+        zones: { slot: '35%', highslot: '23%', left: '19%', right: '14%', point: '9%' },
+        zoneReadouts: {
+          'Low Slot / Crease': '46 Att • 21.7% S% • 11.4 xG',
+          'High Slot': '30 Att • 13.3% S% • 4.2 xG',
+          'Left Circle': '25 Att • 12.0% S% • 2.4 xG',
+          'Right Circle': '18 Att • 11.1% S% • 1.5 xG',
+          'Point': '12 Att • 8.3% S% • 0.4 xG'
+        },
+        transitions: [
+          { label: 'Controlled Zone Entry %', pct: 58.9, color: 'bg-emerald-400' },
+          { label: 'Controlled Zone Exit %', pct: 52.4, color: 'bg-ice-400' },
+          { label: 'Forecheck Puck Recovery %', pct: 48.2, color: 'bg-amber-400' }
+        ],
+        wowy: [
+          { split: 'Together (Paul-Matthews-Cowan)', toi: '260:35', cf: '53.8%', xgf: '54.2%', hdcf: '56.4%', xgf60: '3.12', hi: true },
+          { split: 'Matthews w/o Paul & Cowan', toi: '142:10', cf: '52.4%', xgf: '53.1%', hdcf: '54.8%', xgf60: '3.04', hi: false },
+          { split: 'Paul & Cowan w/o Matthews', toi: '64:20', cf: '46.1%', xgf: '45.4%', hdcf: '44.9%', xgf60: '2.18', hi: false },
+          { split: 'Team Rest of Roster (5v5)', toi: '780:55', cf: '47.1%', xgf: '45.2%', hdcf: '44.6%', xgf60: '2.24', hi: false }
+        ],
+        clips: [
+          { title: 'Matthews & Cowan Slot Cycle Winner', ts: 'Nov 23, 2026 • TOR 4 @ NYI 2', tag: '4-2 Road W', color: 'text-emerald-400' },
+          { title: '4-Point Matthews Surge & Stretch Entries', ts: 'Oct 24, 2026 • TOR 7 @ EDM 2', tag: '7-2 Road W', color: 'text-ice-400' },
+          { title: 'Late 3rd-Period Slot Seam Breakdown', ts: 'Nov 21, 2026 • CBJ 4 @ TOR 3', tag: '3-4 Home L', color: 'text-rose-400' }
+        ]
+      },
+      L1_ALT: {
+        tagged: 'Marchenko (14P) – Matthews (34P) – Nylander (25P)',
+        kpis: [
+          { label: '5v5 Time on Ice', val: '132:50', sub: 'Pre-Marchenko IR Split', pos: true },
+          { label: '5v5 Corsi For %', val: '56.4%', sub: '+7.7% vs Team (48.7%)', pos: true },
+          { label: '5v5 xGF%', val: '57.1%', sub: '3.58 xGF/60 • 2.69 xGA/60', pos: true },
+          { label: 'Actual Goal Diff', val: '+8', sub: '16 GF – 8 GA (66.7% GF%)', pos: true }
+        ],
+        zones: { slot: '33%', highslot: '24%', left: '16%', right: '19%', point: '8%' },
+        zoneReadouts: {
+          'Low Slot / Crease': '34 Att • 20.6% S% • 8.6 xG',
+          'High Slot': '25 Att • 16.0% S% • 3.6 xG',
+          'Left Circle': '17 Att • 11.8% S% • 1.8 xG',
+          'Right Circle': '20 Att • 15.0% S% • 2.2 xG',
+          'Point': '8 Att • 6.2% S% • 0.3 xG'
+        },
+        transitions: [
+          { label: 'Controlled Zone Entry %', pct: 64.2, color: 'bg-emerald-400' },
+          { label: 'Controlled Zone Exit %', pct: 54.8, color: 'bg-ice-400' },
+          { label: 'Forecheck Puck Recovery %', pct: 46.5, color: 'bg-amber-400' }
+        ],
+        wowy: [
+          { split: 'Together (Marchenko-Matthews-Nylander)', toi: '132:50', cf: '56.4%', xgf: '57.1%', hdcf: '59.0%', xgf60: '3.58', hi: true },
+          { split: 'Matthews & Nylander w/o Marchenko', toi: '94:15', cf: '53.9%', xgf: '54.4%', hdcf: '55.2%', xgf60: '3.22', hi: false },
+          { split: 'Nylander w/o Matthews', toi: '278:30', cf: '50.8%', xgf: '49.9%', hdcf: '51.1%', xgf60: '2.86', hi: false },
+          { split: 'Team Rest of Roster (5v5)', toi: '742:25', cf: '46.8%', xgf: '44.9%', hdcf: '44.2%', xgf60: '2.19', hi: false }
+        ],
+        clips: [
+          { title: 'Nylander-to-Marchenko Cross-Ice One-Timer', ts: 'Oct 24, 2026 • TOR 7 @ EDM 2', tag: '7-2 Road W', color: 'text-emerald-400' },
+          { title: 'High-Slot Matthews Catch-and-Release', ts: 'Nov 23, 2026 • TOR 4 @ NYI 2', tag: '4-2 Road W', color: 'text-ice-400' },
+          { title: 'Odd-Man Rush Conceded Off Blue-Line Turnover', ts: 'Nov 21, 2026 • CBJ 4 @ TOR 3', tag: '3-4 Home L', color: 'text-rose-400' }
+        ]
+      },
+      L2: {
+        tagged: 'McKenna (15P) – Tavares (10P) – Nylander (25P)',
+        kpis: [
+          { label: '5v5 Time on Ice', val: '221:05', sub: '8:30 TOI/GP Together', pos: true },
+          { label: '5v5 Corsi For %', val: '51.6%', sub: '+2.9% vs Team (48.7%)', pos: true },
+          { label: '5v5 xGF%', val: '50.8%', sub: '2.94 xGF/60 • 2.85 xGA/60', pos: true },
+          { label: 'Actual Goal Diff', val: '-2', sub: '16 GF – 18 GA (High-Event)', pos: false }
+        ],
+        zones: { slot: '30%', highslot: '25%', left: '17%', right: '20%', point: '8%' },
+        zoneReadouts: {
+          'Low Slot / Crease': '38 Att • 18.4% S% • 8.9 xG',
+          'High Slot': '31 Att • 12.9% S% • 4.1 xG',
+          'Left Circle': '21 Att • 14.3% S% • 2.1 xG',
+          'Right Circle': '25 Att • 16.0% S% • 2.7 xG',
+          'Point': '10 Att • 10.0% S% • 0.3 xG'
+        },
+        transitions: [
+          { label: 'Controlled Zone Entry %', pct: 60.4, color: 'bg-emerald-400' },
+          { label: 'Controlled Zone Exit %', pct: 49.1, color: 'bg-amber-400' },
+          { label: 'Forecheck Puck Recovery %', pct: 44.6, color: 'bg-amber-400' }
+        ],
+        wowy: [
+          { split: 'Together (McKenna-Tavares-Nylander)', toi: '221:05', cf: '51.6%', xgf: '50.8%', hdcf: '52.1%', xgf60: '2.94', hi: true },
+          { split: 'McKenna & Nylander w/o Tavares', toi: '68:40', cf: '53.1%', xgf: '52.4%', hdcf: '53.8%', xgf60: '3.10', hi: false },
+          { split: 'Tavares w/o McKenna & Nylander', toi: '118:20', cf: '47.9%', xgf: '46.8%', hdcf: '47.2%', xgf60: '2.38', hi: false },
+          { split: 'Team Rest of Roster (5v5)', toi: '839:55', cf: '47.8%', xgf: '46.4%', hdcf: '46.0%', xgf60: '2.34', hi: false }
+        ],
+        clips: [
+          { title: 'McKenna Seam Feed to Nylander Rush Goal', ts: 'Nov 23, 2026 • TOR 4 @ NYI 2', tag: '4-2 Road W', color: 'text-emerald-400' },
+          { title: 'Tavares Net-Front Tip & Cycle Possession', ts: 'Oct 24, 2026 • TOR 7 @ EDM 2', tag: '7-2 Road W', color: 'text-ice-400' },
+          { title: 'D-Zone Low-to-High Coverage Breakdown', ts: 'Nov 21, 2026 • CBJ 4 @ TOR 3', tag: '3-4 Home L', color: 'text-rose-400' }
+        ]
+      },
+      L3: {
+        tagged: 'Joshua (3P) – Räty (4P) – Roslovic (23P)',
+        kpis: [
+          { label: '5v5 Time on Ice', val: '200:40', sub: '7:43 TOI/GP Together', pos: false },
+          { label: '5v5 Corsi For %', val: '47.8%', sub: '-0.9% vs Team (48.7%)', pos: false },
+          { label: '5v5 xGF%', val: '46.5%', sub: '2.48 xGF/60 • 2.85 xGA/60', pos: false },
+          { label: 'Actual Goal Diff', val: '-5', sub: '13 GF – 18 GA (Roslovic 23P)', pos: false }
+        ],
+        zones: { slot: '29%', highslot: '21%', left: '18%', right: '20%', point: '12%' },
+        zoneReadouts: {
+          'Low Slot / Crease': '28 Att • 14.3% S% • 5.9 xG',
+          'High Slot': '20 Att • 10.0% S% • 2.3 xG',
+          'Left Circle': '17 Att • 11.8% S% • 1.4 xG',
+          'Right Circle': '19 Att • 15.8% S% • 2.0 xG',
+          'Point': '11 Att • 9.1% S% • 0.4 xG'
+        },
+        transitions: [
+          { label: 'Controlled Zone Entry %', pct: 53.2, color: 'bg-emerald-400' },
+          { label: 'Controlled Zone Exit %', pct: 46.5, color: 'bg-amber-400' },
+          { label: 'Forecheck Puck Recovery %', pct: 50.8, color: 'bg-ice-400' }
+        ],
+        wowy: [
+          { split: 'Together (Joshua-Räty-Roslovic)', toi: '200:40', cf: '47.8%', xgf: '46.5%', hdcf: '45.9%', xgf60: '2.48', hi: true },
+          { split: 'Roslovic w/o Joshua & Räty', toi: '145:10', cf: '50.4%', xgf: '49.6%', hdcf: '49.1%', xgf60: '2.79', hi: false },
+          { split: 'Joshua & Räty w/o Roslovic', toi: '82:30', cf: '44.2%', xgf: '43.1%', hdcf: '42.8%', xgf60: '1.96', hi: false },
+          { split: 'Team Rest of Roster (5v5)', toi: '819:40', cf: '49.1%', xgf: '47.8%', hdcf: '47.5%', xgf60: '2.56', hi: false }
+        ],
+        clips: [
+          { title: 'Roslovic Speed Entry & Off-Wing Release', ts: 'Nov 23, 2026 • TOR 4 @ NYI 2', tag: '4-2 Road W', color: 'text-emerald-400' },
+          { title: 'Joshua Heavy Forecheck Wall Recovery', ts: 'Oct 24, 2026 • TOR 7 @ EDM 2', tag: '7-2 Road W', color: 'text-ice-400' },
+          { title: 'Failed Rim Clearance Leading to GA', ts: 'Nov 21, 2026 • CBJ 4 @ TOR 3', tag: '3-4 Home L', color: 'text-rose-400' }
+        ]
+      },
+      L4: {
+        tagged: 'Duhaime (4P) – Blueger (7P) – MacEwen (6P)',
+        kpis: [
+          { label: '5v5 Time on Ice', val: '162:55', sub: '69% D-Zone Start Share', pos: false },
+          { label: '5v5 Corsi For %', val: '43.9%', sub: 'Heavy Checking Deployment', pos: false },
+          { label: '5v5 xGF%', val: '42.8%', sub: '1.86 xGF/60 • 2.49 xGA/60', pos: false },
+          { label: 'Actual Goal Diff', val: '-4', sub: '8 GF – 12 GA', pos: false }
+        ],
+        zones: { slot: '32%', highslot: '18%', left: '16%', right: '17%', point: '17%' },
+        zoneReadouts: {
+          'Low Slot / Crease': '22 Att • 13.6% S% • 4.2 xG',
+          'High Slot': '12 Att • 8.3% S% • 1.2 xG',
+          'Left Circle': '11 Att • 9.1% S% • 0.8 xG',
+          'Right Circle': '12 Att • 8.3% S% • 0.9 xG',
+          'Point': '12 Att • 8.3% S% • 0.4 xG'
+        },
+        transitions: [
+          { label: 'Controlled Zone Entry %', pct: 38.2, color: 'bg-amber-400' },
+          { label: 'Controlled Zone Exit %', pct: 44.8, color: 'bg-amber-400' },
+          { label: 'Forecheck Puck Recovery %', pct: 54.6, color: 'bg-emerald-400' }
+        ],
+        wowy: [
+          { split: 'Together (Duhaime-Blueger-MacEwen)', toi: '162:55', cf: '43.9%', xgf: '42.8%', hdcf: '44.1%', xgf60: '1.86', hi: true },
+          { split: 'Blueger w/o Duhaime & MacEwen', toi: '110:20', cf: '46.5%', xgf: '45.8%', hdcf: '46.2%', xgf60: '2.14', hi: false },
+          { split: 'Duhaime & MacEwen w/o Blueger', toi: '54:15', cf: '41.8%', xgf: '40.5%', hdcf: '41.2%', xgf60: '1.68', hi: false },
+          { split: 'Team Rest of Roster (5v5)', toi: '920:30', cf: '49.6%', xgf: '48.2%', hdcf: '48.0%', xgf60: '2.62', hi: false }
+        ],
+        clips: [
+          { title: 'Blueger DZ Faceoff Win & Chip Exit', ts: 'Nov 23, 2026 • TOR 4 @ NYI 2', tag: '4-2 Road W', color: 'text-emerald-400' },
+          { title: 'Duhaime & MacEwen Below-Goal-Line Cycle', ts: 'Oct 24, 2026 • TOR 7 @ EDM 2', tag: '7-2 Road W', color: 'text-ice-400' },
+          { title: 'Extended 70s DZ Shift Scramble GA', ts: 'Nov 21, 2026 • CBJ 4 @ TOR 3', tag: '3-4 Home L', color: 'text-rose-400' }
+        ]
+      }
+    };
+
+    let currentLineKey = 'L1';
+
+    function updateTacticalDashboard() {
+      currentLineKey = document.getElementById('forwardLineSelect').value;
+      const dPair = document.getElementById('defensePairSelect').value;
+      const win = document.getElementById('sampleWindowSelect').value;
+      const d = tacticalData[currentLineKey];
+
+      const dMod = dPair === 'D1' ? 1.1 : dPair === 'D2' ? -0.3 : -1.5;
+      const wMod = win === 'last10' ? -1.2 : win === 'home' ? 0.5 : win === 'road' ? -0.4 : 0.0;
+
+      document.getElementById('tactical-kpis').innerHTML = d.kpis.map((k, idx) => {
+        let val = k.val;
+        if (idx === 1 || idx === 2) {
+          val = (parseFloat(k.val) + dMod + wMod).toFixed(1) + '%';
+        }
+        return `
+          <div class="glass-card glass-card-hover rounded-xl p-4 transition">
+            <p class="text-[11px] font-mono uppercase text-slate-400">${k.label}</p>
+            <p class="text-xl sm:text-2xl font-mono font-bold text-white mt-1">${val}</p>
+            <p class="text-xs font-mono mt-1 ${k.pos ? 'text-emerald-400' : 'text-amber-400'}">${k.sub}</p>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('label-slot').textContent = d.zones.slot;
+      document.getElementById('label-highslot').textContent = d.zones.highslot;
+      document.getElementById('label-left').textContent = d.zones.left;
+      document.getElementById('label-right').textContent = d.zones.right;
+      document.getElementById('label-point').textContent = `${d.zones.point} (Point)`;
+      selectRinkZone('Low Slot / Crease');
+
+      document.getElementById('transitionBarsContainer').innerHTML = d.transitions.map(t => {
+        const adj = Math.min(85, Math.max(30, +(t.pct + dMod * 0.5 + wMod * 0.4).toFixed(1)));
+        return `
+          <div>
+            <div class="flex justify-between text-xs mb-1 tabular-nums">
+              <span class="text-slate-300 font-medium">${t.label}</span>
+              <span class="font-mono font-bold text-white">${adj}%</span>
+            </div>
+            <div class="relative w-full h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+              <div class="h-full ${t.color} rounded-full" style="width: ${adj}%"></div>
+              <div class="absolute top-0 bottom-0 w-0.5 bg-white/80" style="left: 52%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('wowyTableBody').innerHTML = d.wowy.map(r => {
+        const xgfVal = parseFloat(r.xgf);
+        const col = xgfVal >= 53 ? 'text-emerald-400 font-bold' : xgfVal >= 50 ? 'text-ice-400' : 'text-amber-400';
+        return `
+          <tr class="${r.hi ? 'bg-leafs-900/35' : 'hover:bg-slate-900/60'}">
+            <td class="py-2.5 px-3 font-sans font-medium ${r.hi ? 'text-white font-semibold' : 'text-slate-300'}">${r.split}</td>
+            <td class="py-2.5 px-2 text-right text-slate-400">${r.toi}</td>
+            <td class="py-2.5 px-2 text-right text-slate-200">${r.cf}</td>
+            <td class="py-2.5 px-2 text-right ${col}">${r.xgf}</td>
+            <td class="py-2.5 px-2 text-right text-slate-200">${r.hdcf}</td>
+            <td class="py-2.5 px-2 text-right text-emerald-400">${r.xgf60}</td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('videoTriggersList').innerHTML = d.clips.map(c => `
+        <div onclick="openVideoModal('${c.title}', '${c.ts}')" class="cursor-pointer group flex items-center justify-between p-3 rounded-xl bg-slate-900/85 hover:bg-slate-800/90 border border-slate-800 hover:border-ice-400/50 transition">
+          <div>
+            <p class="text-xs sm:text-sm font-semibold text-white group-hover:text-ice-400">${c.title}</p>
+            <p class="text-[11px] font-mono ${c.color}">${c.ts} &bull; 8s Optical Feed</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-700 text-xs font-mono text-slate-300">${c.tag}</span>
+        </div>
+      `).join('');
+    }
+
+    function selectRinkZone(zone) {
+      document.getElementById('activeZoneName').textContent = zone;
+      document.getElementById('activeZoneStats').textContent = tacticalData[currentLineKey].zoneReadouts[zone];
+    }
+
+    function openVideoModal(title, ts) {
+      document.getElementById('videoModalTitle').textContent = title;
+      document.getElementById('videoModalTimestamp').textContent = ts;
+      document.getElementById('videoModalPlayers').textContent = tacticalData[currentLineKey].tagged;
+      document.getElementById('videoModal').classList.remove('hidden');
+    }
+
+    function closeVideoModal() {
+      document.getElementById('videoModal').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // 3. DASHBOARD 2: LIVE BENCH TABLET
+    // =========================================================================
+    function updateBenchTablet() {
+      const state = document.getElementById('benchStateSelect').value;
+      const change = document.getElementById('benchChangeSelect').value;
+
+      const isHome = change === 'home';
+      document.getElementById('lastChangeBadge').textContent = isHome ? 'TOR Last Change (Home)' : 'BOS Last Change (Road)';
+      document.getElementById('lastChangeBadge').className = isHome
+        ? 'px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-xs'
+        : 'px-2.5 py-1 rounded-lg bg-amber-500/15 text-amber-300 border border-amber-500/30 font-mono text-xs';
+
+      document.getElementById('benchShiftAlerts').innerHTML = `
+        <div class="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-white">#24 Raddysh – #22 McCabe</p>
+            <p class="text-[11px] text-rose-300">Trapped in DZ (Icing) • 23:52 Avg TOI</p>
+          </div>
+          <span class="font-mono text-sm font-bold text-rose-400">01:14</span>
+        </div>
+        <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-white">#95 Ekman-Larsson – #8 Tanev</p>
+            <p class="text-[11px] text-amber-300">Ready for Next DZ Faceoff</p>
+          </div>
+          <span class="font-mono text-sm font-bold text-emerald-400">00:00 (Fresh)</span>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-white">#44 Rielly – #51 Stecher</p>
+            <p class="text-[11px] text-slate-400">Hold for OZ Faceoff Deployment</p>
+          </div>
+          <span class="font-mono text-sm font-bold text-ice-400">OZ Only</span>
+        </div>
+      `;
+
+      const matchups = [
+        { tor: 'Matthews (54.7% FOW%) Line', opp: 'Lindholm – Pastrnak', toi: '06:42', xgf: isHome ? '55.4%' : '51.8%', action: isHome ? 'Hard Match' : 'Counter w/ McCabe' },
+        { tor: 'Tavares (55.9% FOW%) – McKenna', opp: 'Zacha – Mittelstadt', toi: '05:18', xgf: '52.1%', action: 'Target OZ Draws' },
+        { tor: 'Räty (51.2% FOW%) – Roslovic', opp: 'Coyle – Geekie', toi: '04:55', xgf: '48.4%', action: 'Neutral Zone Speed' },
+        { tor: 'Blueger (53.4%) / Sissons (59.9%)', opp: 'Beecher – Kastelic', toi: '04:10', xgf: '46.9%', action: 'DZ Shutdown / PK' }
+      ];
+
+      document.getElementById('benchMatchupBody').innerHTML = matchups.map(m => `
+        <tr class="hover:bg-slate-900/70">
+          <td class="py-2.5 px-3 font-sans font-bold text-white">${m.tor}</td>
+          <td class="py-2.5 px-2 font-sans text-slate-300">${m.opp}</td>
+          <td class="py-2.5 px-2 text-right text-slate-400">${m.toi}</td>
+          <td class="py-2.5 px-2 text-right ${parseFloat(m.xgf) >= 50 ? 'text-emerald-400 font-bold' : 'text-amber-400'}">${m.xgf}</td>
+          <td class="py-2.5 px-3 text-center"><span class="px-2 py-0.5 rounded bg-leafs-900/60 border border-leafs-500/40 text-[11px] text-ice-400">${m.action}</span></td>
+        </tr>
+      `).join('');
+
+      const winProb = state === 'tied' ? '46.8%' : state === 'trailing1' ? '14.2%' : '4.9%';
+      document.getElementById('liveWinProbBadge').textContent = `TOR Win Prob: ${winProb}`;
+
+      if (state === 'tied') {
+        document.getElementById('winProbCurve').setAttribute('d', 'M 45,110 L 110,92 L 168,104 L 235,84 L 291,116 L 350,115');
+        document.getElementById('pullMarkerLine').setAttribute('x1', '405');
+        document.getElementById('pullMarkerLine').setAttribute('x2', '405');
+        document.getElementById('pullMarkerText').textContent = 'Hold Goalie (Tied)';
+        document.getElementById('pullRecommendationBox').innerHTML = '<strong class="text-white">Tied 2-2 Strategy:</strong> Keep Stolarz in net. Prioritize Matthews (54.7% FOW%) &amp; Tavares (55.9% FOW%) on strong-side offensive zone draws.';
+      } else if (state === 'trailing1') {
+        document.getElementById('winProbCurve').setAttribute('d', 'M 45,110 L 110,95 L 168,118 L 235,134 L 291,158 L 385,174');
+        document.getElementById('pullMarkerLine').setAttribute('x1', '378');
+        document.getElementById('pullMarkerLine').setAttribute('x2', '378');
+        document.getElementById('pullMarkerText').textContent = 'Optimal Pull @ 2:35';
+        document.getElementById('pullRecommendationBox').innerHTML = '<strong class="text-amber-400">Trailing by 1 Optimizer:</strong> Pull goalie at <strong class="text-white">2:35 remaining</strong> upon OZ possession (4.85 6v5 xGF/60 vs 3.62 EN xGA/60 yields +4.4% win prob gain).';
+      } else {
+        document.getElementById('winProbCurve').setAttribute('d', 'M 45,110 L 110,124 L 168,146 L 235,168 L 291,182 L 368,191');
+        document.getElementById('pullMarkerLine').setAttribute('x1', '352');
+        document.getElementById('pullMarkerLine').setAttribute('x2', '352');
+        document.getElementById('pullMarkerText').textContent = 'Optimal Pull @ 4:45';
+        document.getElementById('pullRecommendationBox').innerHTML = '<strong class="text-rose-400">Trailing by 2 Optimizer:</strong> Aggressive pull required at <strong class="text-white">4:45 remaining</strong> on next clean offensive-zone entry or faceoff.';
+      }
+    }
+
+    // =========================================================================
+    // 4. DASHBOARD 3: DEFENSIVE ZONE COVERAGE FORENSICS
+    // =========================================================================
+    const dzoneCauses = [
+      {
+        id: 'switch',
+        label: 'Lost Man-to-Man Pick/Switch',
+        pct: '34%',
+        count: '22 aGA / 64 HDA',
+        note: 'Primary leak in Jim Hiller’s non-switching man-to-man coverage: high-cycle scissor plays above the hashmarks create 2-step separation when wingers lose inside leverage.'
+      },
+      {
+        id: 'seam',
+        label: 'Weak-Side Backdoor Seam Leak',
+        pct: '27%',
+        count: '18 aGA / 51 HDA',
+        note: 'Weak-side defenseman over-commits to puck-side corner battle, leaving the backdoor post open for cross-slot royal-road tap-ins.'
+      },
+      {
+        id: 'rim',
+        label: 'Failed D-to-D Rim Exit',
+        pct: '23%',
+        count: '15 aGA / 43 HDA',
+        note: 'Strong-side forecheck pinches intercept predictable D-to-D wall rims (27.8% glass/icing rate on Rielly-Stecher), leading to immediate slot turnovers.'
+      },
+      {
+        id: 'boxout',
+        label: 'Lost Net-Front Box-Out',
+        pct: '16%',
+        count: '10 aGA / 30 HDA',
+        note: 'Second-chance rebound scrambles at the top of the crease where opposing forwards establish stick-side position inside the Box+1.'
+      }
+    ];
+
+    let activeDzoneCause = 'switch';
+
+    function selectDzoneCause(id) {
+      activeDzoneCause = id;
+      renderDzoneForensics();
+    }
+
+    function renderDzoneForensics() {
+      document.getElementById('dzoneCauseButtons').innerHTML = dzoneCauses.map(c => {
+        const active = c.id === activeDzoneCause;
+        return `
+          <button onclick="selectDzoneCause('${c.id}')" class="text-left p-3 rounded-xl border transition ${active ? 'bg-rose-500/15 border-rose-400 text-white' : 'bg-slate-900/90 border-slate-800 text-slate-300 hover:border-slate-600'}">
+            <div class="flex items-center justify-between font-mono text-xs">
+              <span class="${active ? 'text-rose-400 font-bold' : 'text-slate-400'}">${c.pct} Share</span>
+              <span class="text-[11px] text-slate-400">${c.count}</span>
+            </div>
+            <p class="text-xs sm:text-sm font-bold mt-1">${c.label}</p>
+          </button>
+        `;
+      }).join('');
+
+      const selected = dzoneCauses.find(c => c.id === activeDzoneCause);
+      document.getElementById('dzoneCoachingNote').innerHTML = `<strong class="text-rose-400">Diagnostic Note (${selected.label}):</strong> ${selected.note}`;
+
+      const vectorLayer = document.getElementById('dzoneVectorLayer');
+      if (activeDzoneCause === 'switch') {
+        vectorLayer.innerHTML = `
+          <path d="M 110,195 Q 170,150 235,140" fill="none" stroke="#f43f5e" stroke-width="3" stroke-dasharray="5 3"/>
+          <circle cx="235" cy="140" r="16" fill="#f43f5e" fill-opacity="0.35" stroke="#fb7185" stroke-width="2"/>
+          <text x="235" y="120" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono" font-size="10" font-weight="bold">34% • High-Cycle Pick Separation</text>
+        `;
+      } else if (activeDzoneCause === 'seam') {
+        vectorLayer.innerHTML = `
+          <line x1="105" y1="105" x2="295" y2="92" stroke="#f43f5e" stroke-width="3.5" stroke-dasharray="6 3"/>
+          <circle cx="295" cy="92" r="16" fill="#f43f5e" fill-opacity="0.4" stroke="#fb7185" stroke-width="2"/>
+          <text x="295" y="122" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono" font-size="10" font-weight="bold">27% • Weak-Side Backdoor Seam</text>
+        `;
+      } else if (activeDzoneCause === 'rim') {
+        vectorLayer.innerHTML = `
+          <path d="M 160,42 Q 65,55 65,175" fill="none" stroke="#fbbf24" stroke-width="3.5"/>
+          <circle cx="65" cy="175" r="15" fill="#f59e0b" fill-opacity="0.4" stroke="#fbbf24" stroke-width="2"/>
+          <line x1="65" y1="175" x2="225" y2="115" stroke="#f43f5e" stroke-width="2.5" stroke-dasharray="4 3"/>
+          <text x="165" y="195" text-anchor="middle" fill="#fde68a" font-family="JetBrains Mono" font-size="10" font-weight="bold">23% • Wall Rim Pinch Turnover</text>
+        `;
+      } else {
+        vectorLayer.innerHTML = `
+          <rect x="215" y="64" width="70" height="44" rx="8" fill="#f43f5e" fill-opacity="0.45" stroke="#fb7185" stroke-width="2"/>
+          <text x="250" y="124" text-anchor="middle" fill="#fda4af" font-family="JetBrains Mono" font-size="10" font-weight="bold">16% • Crease-Front Rebound Box-Out Loss</text>
+        `;
+      }
+    }
+
+    // =========================================================================
+    // 5. DASHBOARD 4: SPECIAL TEAMS & OPPONENT PRE-SCOUT
+    // =========================================================================
+    const opponentDossiers = {
+      BOS: {
+        title: 'Fri Nov 27 @ Boston Bruins',
+        stats: 'BOS PK: 79.49% (18th) • BOS PP: 21.4%',
+        goalie: 'Jeremy Swayman: +2.1 GSAx overall, but -.024 below league avg on high-glove flank one-timers.',
+        ppTrigger: 'Boston uses a double-drop entry at 68% frequency to Pastrnak on the left half-wall. Force early dump-ins at the blue line.',
+        forecheckTarget: 'Target Zadorov &amp; Peeke on D-to-D retrievals (19.2% turnover rate under 2-man F1/F2 pressure).'
+      },
+      PIT: {
+        title: 'Sat Nov 28 @ Pittsburgh Penguins',
+        stats: 'PIT PK: 81.97% (9th) • PIT PP: 23.1%',
+        goalie: 'Joel Blomqvist / Alex Nedeljkovic: Vulnerable to low-slot deflections and second-chance net-front scrambles.',
+        ppTrigger: 'Karlsson/Letang point distribution funnels 54% of touches to Crosby below the goal line; deny low-to-high bumper feeds.',
+        forecheckTarget: 'Pressure Pittsburgh’s third pair on weak-side rim exits; exploit aggressive pinch gaps with Roslovic/Nylander speed.'
+      },
+      PHI: {
+        title: 'Mon Nov 30 vs Philadelphia Flyers',
+        stats: 'PHI PK: 77.22% (24th) • PHI PP: 18.8%',
+        goalie: 'Samuel Ersson: -3.4 GSAx; struggles laterally on east-west royal-road passes between Matthews and Nylander.',
+        ppTrigger: 'High-volume perimeter shooting PP (Michkov/Konecny); keep PK diamond tight to block cross-seam lanes.',
+        forecheckTarget: 'Heavy forecheck cycle with Paul/Joshua below the goal line generates high penalty-draw rates against PHI defense.'
+      }
+    };
+
+    function updateSpecialTeams() {
+      const opp = document.getElementById('opponentScoutSelect').value;
+      const d = opponentDossiers[opp];
+      document.getElementById('opponentDossierCard').innerHTML = `
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="px-2 py-0.5 rounded bg-leafs-900 text-ice-400 border border-leafs-500/40 font-mono text-[11px] font-bold">PRE-SCOUT DOSSIER</span>
+            <span class="text-[11px] font-mono text-slate-400">Automated</span>
+          </div>
+          <h2 class="text-base font-bold text-white">${d.title}</h2>
+          <p class="text-xs font-mono text-amber-400 mt-0.5 mb-3">${d.stats}</p>
+
+          <div class="space-y-2.5 text-xs">
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+              <p class="font-mono text-[10px] uppercase text-ice-400 font-bold mb-0.5">Goaltender Vulnerability</p>
+              <p class="text-slate-200 leading-relaxed">${d.goalie}</p>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+              <p class="font-mono text-[10px] uppercase text-amber-400 font-bold mb-0.5">Opponent PP Entry Trigger</p>
+              <p class="text-slate-200 leading-relaxed">${d.ppTrigger}</p>
+            </div>
+            <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
+              <p class="font-mono text-[10px] uppercase text-emerald-400 font-bold mb-0.5">Forecheck Turnover Target</p>
+              <p class="text-slate-200 leading-relaxed">${d.forecheckTarget}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 6. DASHBOARD 5: ROSTER & CAP SIMULATOR
+    // =========================================================================
+    const CAP_CEILING_2627 = 104000000;
+
+    const initialCapRoster = [
+      { id: 'matthews', name: 'Auston Matthews', pos: 'C', cap: 13250000, exp: '2028', war: 4.8, status: 'ACTIVE' },
+      { id: 'nylander', name: 'William Nylander', pos: 'RW', cap: 11500000, exp: '2032', war: 3.4, status: 'ACTIVE' },
+      { id: 'raddysh', name: 'Darren Raddysh', pos: 'RD', cap: 8500000, exp: '2030', war: 2.3, status: 'ACTIVE' },
+      { id: 'rielly', name: 'Morgan Rielly', pos: 'LD', cap: 7500000, exp: '2030', war: 0.4, status: 'ACTIVE' },
+      { id: 'bobrovsky', name: 'Sergei Bobrovsky', pos: 'G', cap: 7000000, exp: '2027', war: -0.9, status: 'ACTIVE' },
+      { id: 'mccabe', name: 'Jake McCabe', pos: 'LD', cap: 4510000, exp: '2030', war: 2.1, status: 'ACTIVE' },
+      { id: 'tanev', name: 'Chris Tanev', pos: 'RD', cap: 4500000, exp: '2030', war: 1.8, status: 'ACTIVE' },
+      { id: 'tavares', name: 'John Tavares', pos: 'C', cap: 4380000, exp: '2029', war: 1.5, status: 'ACTIVE' },
+      { id: 'roslovic', name: 'Jack Roslovic', pos: 'C', cap: 4000000, exp: '2028', war: 2.6, status: 'ACTIVE' },
+      { id: 'oel', name: 'O. Ekman-Larsson', pos: 'LD', cap: 3500000, exp: '2028', war: 0.6, status: 'ACTIVE' },
+      { id: 'joshua', name: 'Dakota Joshua', pos: 'LW', cap: 3250000, exp: '2028', war: 0.3, status: 'ACTIVE' },
+      { id: 'paul', name: 'Nick Paul', pos: 'LW', cap: 3150000, exp: '2029', war: 1.2, status: 'ACTIVE' },
+      { id: 'duhaime', name: 'Brandon Duhaime', pos: 'LW', cap: 2600000, exp: '2027', war: 0.4, status: 'ACTIVE' },
+      { id: 'blueger', name: 'Teddy Blueger', pos: 'C', cap: 2500000, exp: '2027', war: 0.7, status: 'ACTIVE' },
+      { id: 'stolarz', name: 'Anthony Stolarz', pos: 'G', cap: 2500000, exp: '2027', war: 1.9, status: 'ACTIVE' },
+      { id: 'stecher', name: 'Troy Stecher', pos: 'RD', cap: 1350000, exp: '2027', war: 0.5, status: 'ACTIVE' },
+      { id: 'mckenna', name: 'Gavin McKenna (ELC)', pos: 'LW', cap: 1075000, exp: '2029', war: 2.2, status: 'ACTIVE' },
+      { id: 'cowan', name: 'Easton Cowan (ELC)', pos: 'RW', cap: 900000, exp: '2028', war: 2.4, status: 'ACTIVE' },
+      { id: 'macewen', name: 'Zack MacEwen', pos: 'RW', cap: 875000, exp: '2027', war: 0.3, status: 'ACTIVE' },
+      { id: 'raty', name: 'Aatu Räty', pos: 'C', cap: 850000, exp: '2027', war: 0.4, status: 'ACTIVE' },
+      // Injured / LTIR / Retained totaling $112,190,000 commitments
+      { id: 'merzlikins', name: 'Elvis Merzlikins', pos: 'G', cap: 4428000, exp: '2027', war: 0.0, status: 'LTIR' },
+      { id: 'sissons', name: 'Colton Sissons', pos: 'C', cap: 4250000, exp: '2027', war: 0.6, status: 'ACTIVE' },
+      { id: 'marchenko', name: 'Kirill Marchenko', pos: 'RW', cap: 3850000, exp: '2027', war: 1.7, status: 'ACTIVE' },
+      { id: 'domi', name: 'Max Domi (Back Sept 30)', pos: 'C', cap: 3750000, exp: '2028', war: 0.8, status: 'LTIR' },
+      { id: 'wood', name: 'Miles Wood', pos: 'LW', cap: 2500000, exp: '2029', war: 0.3, status: 'ACTIVE' },
+      { id: 'blankenburg', name: 'Nick Blankenburg', pos: 'RD', cap: 1400000, exp: '2027', war: 0.4, status: 'ACTIVE' },
+      { id: 'deadcap', name: 'Retained / Buried Cap', pos: 'CAP', cap: 3822000, exp: '2027', war: 0.0, status: 'ACTIVE' }
+    ];
+
+    let capRosterState = JSON.parse(JSON.stringify(initialCapRoster));
+    let simulatedTrades = [];
+
+    function resetCapSimulator() {
+      capRosterState = JSON.parse(JSON.stringify(initialCapRoster));
+      simulatedTrades = [];
+      renderCapSimulator();
+    }
+
+    function cycleRosterStatus(id) {
+      const p = capRosterState.find(x => x.id === id);
+      if (!p || p.id === 'deadcap') return;
+      if (p.status === 'ACTIVE') p.status = 'LTIR';
+      else if (p.status === 'LTIR') p.status = 'AHL';
+      else p.status = 'ACTIVE';
+      renderCapSimulator();
+    }
+
+    function fmtMoney(n) {
+      return '$' + Math.round(n).toLocaleString('en-US');
+    }
+
+    function renderCapSimulator() {
+      let commitments = 0;
+      let ltirRelief = 0;
+      let totalWar = 0;
+
+      capRosterState.forEach(p => {
+        const buriedSavings = p.status === 'AHL' ? Math.min(p.cap, 1150000) : 0;
+        commitments += (p.cap - buriedSavings);
+        if (p.status === 'LTIR') {
+          ltirRelief += p.cap;
+        } else if (p.status === 'ACTIVE') {
+          totalWar += p.war;
+        }
+      });
+
+      simulatedTrades.forEach(t => {
+        commitments += t.cap;
+        totalWar += t.war;
+      });
+
+      // Baseline LTIR pool includes $634.6K accrued seasonal cushion so base space = $622,600
+      const effectiveLtirPool = ltirRelief + 634600;
+      const effectiveLimit = CAP_CEILING_2627 + effectiveLtirPool;
+      const space = effectiveLimit - commitments;
+      const pct = Math.min(100, Math.max(0, (commitments / effectiveLimit) * 100));
+
+      document.getElementById('capUsedDisplay').textContent = fmtMoney(commitments);
+      document.getElementById('ltirPoolDisplay').textContent = fmtMoney(effectiveLtirPool);
+      const spaceEl = document.getElementById('capSpaceDisplay');
+      spaceEl.textContent = (space < 0 ? '-' : '') + fmtMoney(Math.abs(space));
+      spaceEl.className = `text-lg sm:text-xl font-mono font-bold mt-0.5 ${space >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+      document.getElementById('teamWarDisplay').textContent = totalWar.toFixed(1) + ' WAR';
+
+      const bar = document.getElementById('capProgressBar');
+      bar.style.width = `${pct}%`;
+      bar.className = space >= 0
+        ? 'h-full rounded-full bg-gradient-to-r from-leafs-500 via-emerald-400 to-amber-400 transition-all duration-300'
+        : 'h-full rounded-full bg-rose-500 transition-all duration-300';
+
+      document.getElementById('capStatusLabel').textContent = space >= 0
+        ? `LTIR COMPLIANT • DOMI ($3.75M) & MERZLIKINS ($4.428M) LTIR ACTIVE`
+        : `OVER LTIR CEILING BY ${fmtMoney(Math.abs(space))}`;
+      document.getElementById('capStatusLabel').className = space >= 0 ? 'text-emerald-400 font-semibold' : 'text-rose-400 font-semibold';
+
+      const rows = [
+        ...capRosterState.filter(p => p.id !== 'deadcap'),
+        ...simulatedTrades.map(t => ({ id: t.id, name: t.name + ' (Trade)', pos: t.pos, cap: t.cap, exp: '2027', war: t.war, status: 'ACTIVE' }))
+      ];
+
+      document.getElementById('rosterCapTableBody').innerHTML = rows.map(p => {
+        const badge = p.status === 'LTIR'
+          ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+          : p.status === 'AHL'
+            ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+            : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+
+        return `
+          <tr onclick="cycleRosterStatus('${p.id}')" class="cursor-pointer transition ${p.status !== 'ACTIVE' ? 'opacity-55 bg-slate-950' : 'hover:bg-slate-900/70'}">
+            <td class="py-2 px-3 font-sans font-semibold text-white">${p.name}</td>
+            <td class="py-2 px-2 text-slate-400">${p.pos}</td>
+            <td class="py-2 px-2 text-right text-slate-200">${fmtMoney(p.cap)}</td>
+            <td class="py-2 px-2 text-right text-slate-400">${p.exp}</td>
+            <td class="py-2 px-2 text-right ${p.war >= 0 ? 'text-ice-400' : 'text-rose-400'} font-semibold">${p.war.toFixed(1)}</td>
+            <td class="py-2 px-3 text-center">
+              <span class="px-2 py-0.5 rounded border text-[10px] font-bold">${p.status}</span>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Scatter Plot
+      const activePts = rows.filter(p => p.status === 'ACTIVE' && p.cap >= 850000);
+      document.getElementById('scatterPointsGroup').innerHTML = activePts.map(pt => {
+        const capM = pt.cap / 1000000;
+        const cx = 55 + (capM / 14) * 375;
+        const cy = 295 - ((pt.war + 1.0) / 7.0) * 270;
+        const fill = pt.war < 0 ? '#ef4444' : (pt.war >= capM * 0.35 ? '#10b981' : '#3B82F6');
+        const shortName = pt.name.replace(' (ELC)', '').replace(' (Trade)', '').split(' ').pop();
+        return `
+          <g>
+            <circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5" fill="${fill}" stroke="#0b0f17" stroke-width="1.5"/>
+            <text x="${cx.toFixed(1)}" y="${(cy - 7).toFixed(1)}" text-anchor="middle" fill="#e2e8f0" font-family="Inter" font-size="8.5" font-weight="600">${shortName}</text>
+          </g>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 7. DASHBOARD 6: PRO SCOUTING & TRADE TARGET "FIT FINDER"
+    // =========================================================================
+    const tradePool = [
+      {
+        id: 'andersson',
+        name: 'Rasmus Andersson',
+        team: 'CGY',
+        pos: 'RHD',
+        fit: 96,
+        fullCap: 4550000,
+        war: 2.4,
+        xgaDelta: '-0.38 xGA/60',
+        clause: '6-Team NTC',
+        cost: '2027 1st (Top-10 Prot.) + B-Prospect',
+        pairEffect: 'Pairing Rasmus Andersson with Morgan Rielly projects to drop pair 5v5 xGA/60 from 3.42 to 2.86 (+4.4% xGF% swing) while adding 2:45/GP of RHD PK1 stability.',
+        radar: '190,52 292,135 256,248 128,242 104,140'
+      },
+      {
+        id: 'larsson',
+        name: 'Adam Larsson',
+        team: 'SEA',
+        pos: 'RHD',
+        fit: 93,
+        fullCap: 4500000,
+        war: 2.2,
+        xgaDelta: '-0.42 xGA/60',
+        clause: '10-Team NTC',
+        cost: '2027 2nd + Marlies Defenseman',
+        pairEffect: 'Slotting Adam Larsson next to Morgan Rielly anchors weak-side net-front box-outs and cuts glass-and-out icing exits from 27.8% down to 19.5%.',
+        radar: '190,54 288,137 260,254 124,246 112,142'
+      },
+      {
+        id: 'pettersson',
+        name: 'Marcus Pettersson',
+        team: 'PIT',
+        pos: 'RHD',
+        fit: 89,
+        fullCap: 4025000,
+        war: 2.0,
+        xgaDelta: '-0.34 xGA/60',
+        clause: '8-Team NTC',
+        cost: '2027 2nd + Conditional 3rd',
+        pairEffect: 'Adding Marcus Pettersson stabilizes second-pair D-zone retrievals and frees Jake McCabe to take tough shutdown matchups alongside Darren Raddysh.',
+        radar: '190,54 287,137 242,232 130,240 106,139'
+      },
+      {
+        id: 'carrier',
+        name: 'Alexandre Carrier',
+        team: 'NSH',
+        pos: 'RHD',
+        fit: 86,
+        fullCap: 3750000,
+        war: 1.6,
+        xgaDelta: '-0.26 xGA/60',
+        clause: 'No Trade Clause',
+        cost: '2027 3rd + Luke Haymes',
+        pairEffect: 'Carrier’s high-tempo puck retrievals (56.1% controlled exit rate) immediately upgrade Toronto’s bottom-4 transition game under heavy forechecks.',
+        radar: '190,54 287,137 245,235 142,226 100,138'
+      },
+      {
+        id: 'bjugstad',
+        name: 'Nick Bjugstad',
+        team: 'UTA',
+        pos: 'C',
+        fit: 84,
+        fullCap: 2100000,
+        war: 1.3,
+        xgaDelta: '-0.18 xGA/60',
+        clause: 'No Trade Clause',
+        cost: '2027 4th Round Pick',
+        pairEffect: '6’6” right-shot center bolsters 3C/4C defensive-zone faceoffs (54.2% FOW%) and protects leads late in the 3rd period.',
+        radar: '190,54 304,132 222,202 156,204 146,149'
+      }
+    ];
+
+    let selectedTradeId = 'andersson';
+
+    function selectTradePreview(id) {
+      selectedTradeId = id;
+      renderTradeFinder();
+    }
+
+    function pushTradeToCap(event, id) {
+      event.stopPropagation();
+      const target = tradePool.find(t => t.id === id);
+      const retained = document.getElementById('tradeRetentionCheck').checked;
+      if (!target) return;
+
+      const effCap = retained ? target.fullCap * 0.5 : target.fullCap;
+      if (!simulatedTrades.find(x => x.id === id)) {
+        simulatedTrades.push({ id: target.id, name: target.name, pos: target.pos, cap: effCap, war: target.war });
+        renderCapSimulator();
+      }
+      document.getElementById('tradeToastMsg').textContent = `✓ Added ${target.name} (${fmtMoney(effCap)}) to Cap Sim`;
+    }
+
+    function renderTradeFinder() {
+      const posF = document.getElementById('tradePosFilter').value;
+      const maxCapM = parseFloat(document.getElementById('tradeMaxCapFilter').value);
+      const retained = document.getElementById('tradeRetentionCheck').checked;
+
+      const filtered = tradePool.filter(t => {
+        const effCapM = (retained ? t.fullCap * 0.5 : t.fullCap) / 1000000;
+        const posOk = posF === 'ALL' || t.pos === posF;
+        return posOk && effCapM <= maxCapM;
+      });
+
+      const activeTarget = tradePool.find(t => t.id === selectedTradeId) || filtered[0] || tradePool[0];
+      document.getElementById('radarBoostPolygon').setAttribute('points', activeTarget.radar);
+      document.getElementById('chemistrySandboxBox').innerHTML = `
+        <p class="font-mono text-[10px] uppercase text-emerald-400 font-bold mb-1">Line-Chemistry Projection: ${activeTarget.name}</p>
+        <p class="text-slate-200 leading-relaxed">${activeTarget.pairEffect}</p>
+      `;
+
+      document.getElementById('tradeTargetsList').innerHTML = filtered.map(t => {
+        const effCap = retained ? t.fullCap * 0.5 : t.fullCap;
+        const isSel = t.id === activeTarget.id;
+        return `
+          <div onclick="selectTradePreview('${t.id}')" class="cursor-pointer p-3.5 rounded-xl border transition ${isSel ? 'bg-leafs-900/40 border-ice-400' : 'bg-slate-900/90 border-slate-800 hover:border-slate-600'}">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-mono text-xs font-bold">${t.fit}% FIT</span>
+                <span class="text-sm font-bold text-white">${t.name}</span>
+                <span class="text-xs font-mono text-slate-400">${t.team} &bull; ${t.pos}</span>
+              </div>
+              <button onclick="pushTradeToCap(event, '${t.id}')" class="px-2.5 py-1 rounded-lg bg-ice-500 hover:bg-ice-400 text-slate-950 font-sans font-bold text-xs transition">
+                Simulate Trade into Cap
+              </button>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-2.5 text-xs font-mono tabular-nums">
+              <div><span class="text-slate-400">Eff Cap:</span> <strong class="text-white">${fmtMoney(effCap)}</strong></div>
+              <div><span class="text-slate-400">Impact:</span> <strong class="text-emerald-400">${t.xgaDelta}</strong></div>
+              <div><span class="text-slate-400">Clause:</span> <span class="text-amber-300">${t.clause}</span></div>
+              <div><span class="text-slate-400">Ask:</span> <span class="text-slate-300">${t.cost}</span></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 8. DASHBOARD 7: PLAYOFF ODDS & SEASON TRAJECTORY SIMULATOR
+    // =========================================================================
+    function updatePlayoffSim() {
+      const xgfBoost = parseFloat(document.getElementById('xgfBoostSlider').value);
+      const svTarget = parseFloat(document.getElementById('svRegressSlider').value);
+
+      const newXgf = (47.3 + xgfBoost).toFixed(1);
+      document.getElementById('sliderXgfVal').textContent = `+${xgfBoost.toFixed(1)}% (${newXgf}%)`;
+      document.getElementById('sliderSvVal').textContent = `${svTarget.toFixed(3)} SV%`;
+
+      // Base 21 PTS in 26 GP + 56 remaining games simulated
+      const svBoostPts = ((svTarget - 0.887) / 0.003) * 1.4;
+      const xgfBoostPts = xgfBoost * 2.1;
+      const medianPts = Math.round(78 + svBoostPts + xgfBoostPts);
+      const p25 = medianPts - 6;
+      const p75 = medianPts + 6;
+      const odds = Math.min(82.0, Math.max(6.5, +(11.5 + (medianPts - 83) * 3.1).toFixed(1)));
+
+      document.getElementById('playoffOddsDisplay').textContent = `${odds}%`;
+      document.getElementById('medianPtsDisplay').textContent = `${medianPts} PTS`;
+      document.getElementById('pctRangeDisplay').textContent = `${p25} – ${p75} PTS`;
+
+      // Map Points [0..115] -> Y [190..20]
+      const yMed = 190 - (medianPts / 115) * 170;
+      const y25 = 190 - (p25 / 115) * 170;
+      const y75 = 190 - (p75 / 115) * 170;
+
+      document.getElementById('medianProjLine').setAttribute('y2', yMed.toFixed(1));
+      document.getElementById('fanConePolygon').setAttribute('points', `213,160 575,${y75.toFixed(1)} 575,${y25.toFixed(1)}`);
+    }
+
+    // =========================================================================
+    // 9. DASHBOARD 8: 2026 DRAFT & PROSPECT HUB
+    // =========================================================================
+    const draftProspects = [
+      { pick: 1, label: '2026 #1', name: 'Gavin McKenna', pos: 'LW', group: 'F', club: 'Toronto Maple Leafs (NHL)', nhle: 47.3, pStar: 88, pNhl: 99, grade: 'A+' },
+      { pick: 60, label: '2026 #60', name: 'Alexander Bilecki', pos: 'LD', group: 'D', club: 'Kitchener Rangers (OHL)', nhle: 28.4, pStar: 24, pNhl: 58, grade: 'B+' },
+      { pick: 69, label: '2026 #69', name: 'Ethan MacKenzie', pos: 'LD', group: 'D', club: 'Edmonton Oil Kings (WHL)', nhle: 25.9, pStar: 18, pNhl: 49, grade: 'B' },
+      { pick: 73, label: '2026 #73', name: 'Zac Olsen', pos: 'RW', group: 'F', club: 'Saskatoon Blades (WHL)', nhle: 27.2, pStar: 21, pNhl: 52, grade: 'B' },
+      { pick: 76, label: '2026 #76', name: 'Måns Gudmundsson', pos: 'RD', group: 'D', club: 'Färjestad BK (SHL/J20)', nhle: 24.8, pStar: 19, pNhl: 47, grade: 'B-' }
+    ];
+
+    let draftSortCol = 'pick';
+    let draftAsc = true;
+
+    function sortDraftTable(col) {
+      if (draftSortCol === col) draftAsc = !draftAsc;
+      else {
+        draftSortCol = col;
+        draftAsc = col === 'pick';
+      }
+      renderDraftTable();
+    }
+
+    function renderDraftTable() {
+      const posF = document.getElementById('draftPosFilter').value;
+      const list = draftProspects
+        .filter(p => posF === 'ALL' || p.group === posF)
+        .sort((a, b) => draftAsc ? a[draftSortCol] - b[draftSortCol] : b[draftSortCol] - a[draftSortCol]);
+
+      document.getElementById('draftTableBody').innerHTML = list.map(p => `
+        <tr class="hover:bg-slate-900/70">
+          <td class="py-2.5 px-2.5 font-bold text-ice-400">${p.label}</td>
+          <td class="py-2.5 px-2.5 font-sans font-bold text-white">${p.name}</td>
+          <td class="py-2.5 px-2 text-slate-300">${p.pos}</td>
+          <td class="py-2.5 px-2 font-sans text-slate-400">${p.club}</td>
+          <td class="py-2.5 px-2 text-right font-bold text-white">${p.nhle.toFixed(1)}</td>
+          <td class="py-2.5 px-2 text-right ${p.pStar >= 50 ? 'text-emerald-400 font-bold' : 'text-amber-400'}">${p.pStar}%</td>
+          <td class="py-2.5 px-2 text-right text-slate-200">${p.pNhl}%</td>
+          <td class="py-2.5 px-2.5 text-center"><span class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-amber-400 font-bold">${p.grade}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // Initialize All 9 Modules on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      updateTacticalDashboard();
+      updateBenchTablet();
+      renderDzoneForensics();
+      updateSpecialTeams();
+      renderCapSimulator();
+      renderTradeFinder();
+      updatePlayoffSim();
+      renderDraftTable();
+    });
+  </script>
+</body>
+</html>

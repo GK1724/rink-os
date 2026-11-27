@@ -1,0 +1,39 @@
+name: RINK-OS Nightly NHL Data Refresh
+
+on:
+  schedule:
+    # Runs daily at 11:00 UTC (6:00 AM EST)
+    - cron: "0 11 * * *"
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run NHL API ETL & Metrics Engine
+        run: |
+          python etl/rink_os_etl.py
+          python etl/build_metrics.py
+
+      - name: Commit updated JSON feeds
+        run: |
+          git config user.name "RINK-OS Bot"
+          git config user.email "actions@github.com"
+          git add rink_os_data/*.json
+          git diff --staged --quiet || git commit -m "chore(data): nightly NHL API telemetry refresh"
+          git push
