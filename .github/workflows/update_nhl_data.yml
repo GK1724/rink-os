@@ -29,6 +29,7 @@ jobs:
         run: |
           python etl/rink_os_etl.py
           python etl/build_metrics.py
+          python etl/build_summary.py
 
       - name: Commit updated JSON feeds
         run: |
