@@ -2302,5 +2302,52 @@
       renderDraftTable();
     });
   </script>
+<script>
+  /* RINK-OS live data loader — refreshes headline team facts (record, points,
+     GF/GA, division place, PP/PK) from the nightly NHL summary feed.
+        If the feed is unavailable, the built-in values stay as-is. */
+            (function () {
+    function applyPairs(pairs) {
+          var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+                  acceptNode: function (n) {
+                            var p = n.parentNode && n.parentNode.nodeName;
+                            return (p === 'SCRIPT' || p === 'STYLE') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+                  }
+          });
+          var nodes = [];
+          while (walker.nextNode()) nodes.push(walker.currentNode);
+          nodes.forEach(function (n) {
+                  var t = n.nodeValue, out = t;
+                  pairs.forEach(function (pr) { out = out.split(pr[0]).join(pr[1]); });
+                  if (out !== t) n.nodeValue = out;
+          });
+    }
+                fetch('rink_os_data/rink_os_summary.json', { cache: 'no-store' })
+                  .then(function (r) { if (!r.ok) throw new Error('feed ' + r.status); return r.json(); })
+         .then(function (s) {
+                 var gaLine = s.goals_against + ' GA (' + s.ga_rank_ordinal + ' NHL \u2022 ' + Number(s.ga_per_game).toFixed(2) + ' GA/G)');
+                 var pairs = [
+                           ['82 / 92', s.goals_for + ' / ' + s.goals_against],
+                           ['92 GA (27th NHL \u2022 3.54 GA/G)', gaLine],
+                           ['92 GA', s.goals_against + ' GA'],
+                           ['3.54 GA/G', Number(s.ga_per_game).toFixed(2) + ' GA/G'],
+                           ['(27th NHL', '(' + s.ga_rank_ordinal + ' NHL'],
+                           ['Toronto Maple Leafs (8th)', 'Toronto Maple Leafs (' + s.division_ordinal + ')'],
+                           ['8th Atlantic', s.division_ordinal + ' Atlantic'],
+                           ['9-14-3', s.record],
+                           ['21 PTS', s.points + ' PTS'],
+                           ['(.404)', '(' + s.pts_pct_display + ')'],
+                           ['26 GP', s.gp + ' GP'],
+                           ['GP 26', 'GP ' + s.gp],
+                           ['56 GP Remaining', s.games_remaining + ' GP Remaining'],
+                           ['25.35%', Number(s.pp_pct).toFixed(2) + '%'],
+                           ['82.28%', Number(s.pk_pct).toFixed(2) + '%']
+                         ];
+                 applyPairs(pairs);
+         })
+                  .catch(function () { /* feed unavailable: keep built-in values */ });
+            })();
+
+            </script>
 </body>
 </html>
